@@ -199,9 +199,24 @@ export default function ModelViewerWithLoader({ modelPath, fallback }: ModelView
               powerPreference: 'high-performance',
               preserveDrawingBuffer: false,
             }}
-            dpr={[1, Math.min(window.devicePixelRatio, 2)]}
+            dpr={[1, Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 2)]}
             frameloop="always"
-            style={{ background: '#f5f5f5', touchAction: 'none' }}
+            style={{ background: '#f5f5f5' }}
+            onCreated={({ gl, events }) => {
+              // Enable touch events
+              gl.domElement.style.touchAction = 'none';
+              gl.domElement.style.userSelect = 'none';
+              gl.domElement.style.webkitUserSelect = 'none';
+              
+              // Prevent default touch behaviors
+              const preventDefaults = (e: TouchEvent) => {
+                e.preventDefault();
+              };
+              
+              gl.domElement.addEventListener('touchstart', preventDefaults, { passive: false });
+              gl.domElement.addEventListener('touchmove', preventDefaults, { passive: false });
+              gl.domElement.addEventListener('touchend', preventDefaults, { passive: false });
+            }}
           >
             <color attach="background" args={['#f5f5f5']} />
             <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={50} />
@@ -223,15 +238,23 @@ export default function ModelViewerWithLoader({ modelPath, fallback }: ModelView
               dampingFactor={0.05}
               target={[0, 0, 0]}
               touches={{
-                ONE: 2, // Rotate
-                TWO: 1, // Zoom
+                ONE: 2, // Rotate (touch with one finger)
+                TWO: 1, // Zoom (pinch with two fingers)
               }}
+              mouseButtons={{
+                LEFT: 2, // Rotate
+                MIDDLE: 1, // Zoom
+                RIGHT: 0, // Pan
+              }}
+              enableDamping={true}
+              screenSpacePanning={false}
             />
           </Canvas>
         </Suspense>
         
-        <div className="absolute bottom-6 left-6 bg-white/95 backdrop-blur-md px-5 py-3 rounded-sm text-xs text-neutral-700 uppercase tracking-wider shadow-lg border border-neutral-200">
-          <p>Drag to rotate • Scroll to zoom</p>
+        <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 bg-white/95 backdrop-blur-md px-3 sm:px-5 py-2 sm:py-3 rounded-sm text-[10px] sm:text-xs text-neutral-700 uppercase tracking-wider shadow-lg border border-neutral-200 pointer-events-none">
+          <p className="hidden sm:block">Drag to rotate • Scroll to zoom</p>
+          <p className="sm:hidden">Touch to rotate • Pinch to zoom</p>
         </div>
       </div>
     </ModelErrorBoundary>
