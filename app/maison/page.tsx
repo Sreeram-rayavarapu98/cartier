@@ -1,4 +1,10 @@
+'use client';
+
 import Navigation from '../components/Navigation';
+import ScrollFade from '../components/ScrollFade';
+import ParallaxSection from '../components/ParallaxSection';
+import HoverScaleImage from '../components/HoverScaleImage';
+import Image from 'next/image';
 
 // The Maison Page - Philosophy/About
 // Theme: Maison Luxe (p=#0b3a2e, bo=#00000014, b=#fffdf9)
@@ -8,16 +14,16 @@ export default function MaisonPage() {
     <main className="min-h-screen" style={{ backgroundColor: '#fffdf9' }}>
       <Navigation />
       
-      {/* Hero Section */}
+      {/* Hero Section with Parallax */}
       <section className="relative h-[70vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0">
+        <ParallaxSection speed={0.3} className="absolute inset-0">
           <div className="w-full h-full bg-gradient-to-br from-neutral-100 to-neutral-200 flex items-center justify-center">
             <div className="text-center text-neutral-400">
               <p className="text-sm uppercase tracking-wider mb-2">The Maison</p>
               <p className="text-xs">Interior Scene</p>
             </div>
           </div>
-        </div>
+        </ParallaxSection>
         
         <div className="relative z-10 max-w-[1920px] mx-auto px-6 lg:px-16 text-center">
           <h1 className="text-7xl md:text-8xl lg:text-9xl font-serif font-bold mb-6 text-white">
@@ -32,8 +38,9 @@ export default function MaisonPage() {
       {/* Our Philosophy Section */}
       <section className="py-24 px-6 lg:px-16" style={{ backgroundColor: '#fffdf9' }}>
         <div className="max-w-[1920px] mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
+          <ScrollFade>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <div>
               <p className="text-xs uppercase tracking-[0.2em] mb-4" style={{ color: '#0b3a2e' }}>
                 Our Philosophy
               </p>
@@ -50,38 +57,52 @@ export default function MaisonPage() {
                 We honor the integrity of wood, stone, and metal, allowing their inherent beauty to guide 
                 our creative process.
               </p>
-            </div>
-            <div className="aspect-[4/3] bg-neutral-100 rounded-lg overflow-hidden">
-              <div className="absolute inset-0 flex items-center justify-center text-neutral-400">
-                <p className="text-sm">Desk with Golden Sculpture</p>
+              </div>
+              <div className="aspect-[4/3] rounded-lg overflow-hidden relative border border-[#00000014]">
+                <HoverScaleImage
+                  src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&q=80"
+                  alt="Desk with Golden Sculpture"
+                  className="w-full h-full"
+                  fill
+                  scale={1.05}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
               </div>
             </div>
-          </div>
+          </ScrollFade>
         </div>
       </section>
 
       {/* Quote Section */}
       <section className="py-16 px-6 lg:px-16" style={{ backgroundColor: '#fffdf9' }}>
-        <div className="max-w-4xl mx-auto text-center">
-          <p className="text-2xl md:text-3xl font-serif italic text-neutral-900 leading-relaxed mb-6">
-            "To design is to communicate clearly by whatever means you can control or master."
-          </p>
-          <p className="text-sm uppercase tracking-wider text-neutral-600">
-            — ALESSANDRO ROSSI, FOUNDER
-          </p>
-        </div>
+        <ScrollFade delay={0.2}>
+          <div className="max-w-4xl mx-auto text-center">
+            <p className="text-2xl md:text-3xl font-serif italic text-neutral-900 leading-relaxed mb-6">
+              "To design is to communicate clearly by whatever means you can control or master."
+            </p>
+            <p className="text-sm uppercase tracking-wider text-neutral-600">
+              — ALESSANDRO ROSSI, FOUNDER
+            </p>
+          </div>
+        </ScrollFade>
       </section>
 
       {/* Mastery of Material Section */}
       <section className="py-24 px-6 lg:px-16" style={{ backgroundColor: '#fffdf9' }}>
         <div className="max-w-[1920px] mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="aspect-[4/3] bg-neutral-100 rounded-lg overflow-hidden order-2 lg:order-1">
-              <div className="absolute inset-0 flex items-center justify-center text-neutral-400">
-                <p className="text-sm">Hands Working with Wood</p>
+          <ScrollFade delay={0.3}>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <div className="aspect-[4/3] rounded-lg overflow-hidden relative order-2 lg:order-1 border border-[#00000014]">
+                <HoverScaleImage
+                  src="https://images.unsplash.com/photo-1556911220-bff31c812dba?w=1200&q=80"
+                  alt="Hands Working with Wood"
+                  className="w-full h-full"
+                  fill
+                  scale={1.05}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
               </div>
-            </div>
-            <div className="order-1 lg:order-2">
+              <div className="order-1 lg:order-2">
               <p className="text-xs uppercase tracking-[0.2em] mb-4" style={{ color: '#0b3a2e' }}>
                 The Savoir-Faire
               </p>
@@ -99,26 +120,35 @@ export default function MaisonPage() {
                 allowing each piece to be shaped, refined, and perfected without the pressure of 
                 mass production.
               </p>
+              </div>
             </div>
-          </div>
+          </ScrollFade>
         </div>
       </section>
 
       {/* Textured Background Section */}
       <section className="py-24 px-6 lg:px-16">
-        <div className="max-w-[1920px] mx-auto">
-          <div className="aspect-[21/9] bg-neutral-900 rounded-lg overflow-hidden">
-            <div className="absolute inset-0 flex items-center justify-center text-neutral-400">
-              <p className="text-sm">Natural Stone Texture</p>
+        <ScrollFade delay={0.4}>
+          <div className="max-w-[1920px] mx-auto">
+            <div className="aspect-[21/9] bg-neutral-900 rounded-lg overflow-hidden relative">
+              <HoverScaleImage
+                src="https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=1920&q=80"
+                alt="Natural Stone Texture"
+                className="w-full h-full"
+                fill
+                scale={1.02}
+                sizes="100vw"
+              />
             </div>
           </div>
-        </div>
+        </ScrollFade>
       </section>
 
       {/* Brand Values Section */}
       <section className="py-24 px-6 lg:px-16" style={{ backgroundColor: '#fffdf9' }}>
         <div className="max-w-[1920px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <ScrollFade delay={0.5}>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div>
               <h3 className="text-2xl font-serif font-bold mb-4 text-neutral-900">RARITY</h3>
               <p className="text-base text-neutral-700 font-light leading-relaxed">
@@ -138,6 +168,7 @@ export default function MaisonPage() {
               </p>
             </div>
           </div>
+          </ScrollFade>
         </div>
       </section>
 

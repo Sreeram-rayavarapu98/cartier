@@ -1,4 +1,9 @@
+'use client';
+
 import Navigation from '../components/Navigation';
+import ScrollFade from '../components/ScrollFade';
+import ParallaxSection from '../components/ParallaxSection';
+import HoverScaleImage from '../components/HoverScaleImage';
 import Link from 'next/link';
 
 // Landing Page 3 - AURELIUS Style
@@ -14,16 +19,16 @@ export default function LandingPage3() {
         Complimentary Shipping & Assembly on All Orders
       </div>
 
-      {/* Hero Section */}
+      {/* Hero Section with Parallax */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0">
+        <ParallaxSection speed={0.3} className="absolute inset-0">
           <div className="w-full h-full bg-gradient-to-br from-neutral-100 to-neutral-200 flex items-center justify-center">
             <div className="text-center text-neutral-400">
               <p className="text-sm uppercase tracking-wider mb-2">Hero Image</p>
               <p className="text-xs">Modern Living Room</p>
             </div>
           </div>
-        </div>
+        </ParallaxSection>
         
         <div className="relative z-10 max-w-[1920px] mx-auto px-6 lg:px-16 text-center">
           <h1 className="text-6xl md:text-7xl lg:text-8xl font-serif font-bold mb-6 text-white leading-tight">

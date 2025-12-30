@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import SuppressHydrationWarning from "./components/SuppressHydrationWarning";
+import PageTransition from "./components/PageTransition";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -17,7 +18,12 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Luxury Furniture | Elegant Home Collections",
   description: "Discover our curated collection of luxury furniture pieces, crafted with precision and elegance.",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=5",
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({
@@ -26,16 +32,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-      </head>
+    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <body
         className={`${playfair.variable} ${inter.variable} antialiased`}
         suppressHydrationWarning
       >
         <SuppressHydrationWarning />
-        {children}
+        <PageTransition>{children}</PageTransition>
       </body>
     </html>
   );

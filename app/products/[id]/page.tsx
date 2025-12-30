@@ -1,8 +1,11 @@
 'use client';
 
-import { use, useState } from 'react';
+import { use, useState, useEffect } from 'react';
 import Navigation from '../../components/Navigation';
-import ModelViewerWithLoader from '../../components/ModelViewerWithLoader';
+import ProductViewer from '../../components/ProductViewer';
+import ScrollFade from '../../components/ScrollFade';
+import HoverScaleImage from '../../components/HoverScaleImage';
+import Button from '../../components/Button';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
@@ -58,6 +61,30 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
   const { id } = use(params);
   const product = productData[id] || productData['1'];
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Example design states - customize based on your product
+  const designStates = [
+    {
+      name: 'Closed',
+      modelPath: product.modelPath,
+      animation: { type: 'open' as const, duration: 2000 },
+    },
+    {
+      name: 'Open',
+      modelPath: product.modelPath, // Use same model or different path
+      animation: { type: 'expand' as const, duration: 2000 },
+    },
+  ];
 
   return (
     <main className="min-h-screen bg-white">
@@ -65,37 +92,44 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
       
       <div className="pt-24 sm:pt-32 pb-12 sm:pb-24 px-4 sm:px-6 lg:px-16">
         <div className="max-w-[1920px] mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-12"
-          >
-            <a href="/products" className="text-sm text-neutral-600 hover:text-[#8B0000] transition-colors uppercase tracking-wider">
-              ← Back to Collections
-            </a>
-          </motion.div>
+          <ScrollFade>
+            <div className="mb-12">
+              <a href="/products" className="text-sm text-neutral-600 hover:text-[#8B0000] transition-colors uppercase tracking-wider">
+                ← Back to Collections
+              </a>
+            </div>
+          </ScrollFade>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-24 mb-12 sm:mb-24">
-            {/* 3D Model Viewer */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="aspect-square w-full"
-            >
-              <div className="relative w-full h-full bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-lg overflow-hidden shadow-2xl">
-                <ModelViewerWithLoader modelPath={product.modelPath} />
-              </div>
-            </motion.div>
+          {/* Mobile: Full-width viewer at top */}
+          {isMobile && (
+            <div className="mb-12 -mx-4 sm:-mx-6 lg:mx-0">
+              <ProductViewer 
+                modelPath={product.modelPath}
+                designStates={designStates}
+                isMobile={true}
+                className="rounded-none"
+              />
+            </div>
+          )}
+
+          <div className={`grid grid-cols-1 ${isMobile ? '' : 'lg:grid-cols-2'} gap-8 sm:gap-12 lg:gap-24 mb-12 sm:mb-24`}>
+            {/* Desktop: 3D Model Viewer */}
+            {!isMobile && (
+              <ScrollFade direction="left" delay={0.1}>
+                <div className="w-full">
+                  <ProductViewer 
+                    modelPath={product.modelPath}
+                    designStates={designStates}
+                    isMobile={false}
+                    className="shadow-2xl"
+                  />
+                </div>
+              </ScrollFade>
+            )}
 
             {/* Product Details */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="flex flex-col justify-center"
-            >
+            <ScrollFade direction={isMobile ? 'up' : 'right'} delay={isMobile ? 0.1 : 0.2}>
+              <div className="flex flex-col justify-center">
               <p className="text-[10px] sm:text-xs text-neutral-500 uppercase tracking-[0.2em] font-medium mb-4">
                 {product.category}
               </p>
@@ -124,54 +158,48 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
-                <button className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 bg-[#8B0000] text-white text-xs font-medium tracking-[0.2em] uppercase hover:bg-[#A00000] transition-all duration-300 border-2 border-[#8B0000]">
+                <Button variant="primary" className="w-full sm:w-auto">
                   Add to Cart
-                </button>
-                <button className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 border-2 border-neutral-900 text-neutral-900 text-xs font-medium tracking-[0.2em] uppercase hover:bg-neutral-900 hover:text-white transition-all duration-300">
+                </Button>
+                <Button variant="secondary" className="w-full sm:w-auto">
                   Request Quote
-                </button>
+                </Button>
               </div>
-            </motion.div>
+              </div>
+            </ScrollFade>
           </div>
 
           {/* Image Gallery Section */}
           {product.images && product.images.length > 0 && (
-            <motion.section
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="mb-24"
-            >
-              <h2 className="text-3xl font-serif font-bold mb-8 text-neutral-900">Gallery</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {product.images.map((img: string, idx: number) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.5 + idx * 0.1 }}
-                    className="relative aspect-square rounded-lg overflow-hidden border border-[#00000014] cursor-pointer group"
-                    onClick={() => setSelectedImageIndex(idx)}
-                  >
-                    <Image
-                      src={img}
-                      alt={`${product.name} - Image ${idx + 1}`}
-                      fill
-                      className="object-cover color-graded group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </motion.div>
-                ))}
-              </div>
-            </motion.section>
+            <ScrollFade delay={0.3}>
+              <section className="mb-24">
+                <h2 className="text-3xl font-serif font-bold mb-8 text-neutral-900">Gallery</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {product.images.map((img: string, idx: number) => (
+                    <ScrollFade key={idx} delay={0.4 + idx * 0.1}>
+                      <div
+                        className="relative aspect-square rounded-lg overflow-hidden border border-[#00000014] cursor-pointer"
+                        onClick={() => setSelectedImageIndex(idx)}
+                      >
+                        <HoverScaleImage
+                          src={img}
+                          alt={`${product.name} - Image ${idx + 1}`}
+                          className="w-full h-full"
+                          fill
+                          scale={1.05}
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
+                        />
+                      </div>
+                    </ScrollFade>
+                  ))}
+                </div>
+              </section>
+            </ScrollFade>
           )}
 
           {/* Additional Info Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-12 pt-16 border-t border-neutral-200"
-          >
+          <ScrollFade delay={0.5}>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 pt-16 border-t border-neutral-200">
             <div>
               <h3 className="text-xs font-medium text-neutral-900 mb-3 uppercase tracking-[0.15em]">
                 Free Shipping
@@ -196,7 +224,8 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
                 Professional white-glove setup service available
               </p>
             </div>
-          </motion.div>
+          </div>
+          </ScrollFade>
         </div>
       </div>
     </main>

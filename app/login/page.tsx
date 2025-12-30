@@ -1,4 +1,7 @@
+'use client';
+
 import AccountNavigation from '../components/AccountNavigation';
+import ScrollFade from '../components/ScrollFade';
 import Link from 'next/link';
 
 // Login Page - Theme matches account pages
@@ -11,7 +14,8 @@ export default function LoginPage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             {/* Left - Login */}
-            <div>
+            <ScrollFade direction="left">
+              <div>
               <h1 className="text-4xl md:text-5xl font-serif font-bold mb-8 text-neutral-900">
                 I Have an Account
               </h1>
@@ -50,10 +54,12 @@ export default function LoginPage() {
                   Forgot password?
                 </Link>
               </form>
-            </div>
+              </div>
+            </ScrollFade>
 
             {/* Right - Create Account */}
-            <div>
+            <ScrollFade direction="right" delay={0.2}>
+              <div>
               <h1 className="text-4xl md:text-5xl font-serif font-bold mb-4 text-neutral-900">
                 I Am New to Aurelius
               </h1>
@@ -81,7 +87,8 @@ export default function LoginPage() {
               >
                 Create Account
               </Link>
-            </div>
+              </div>
+            </ScrollFade>
           </div>
         </div>
       </div>

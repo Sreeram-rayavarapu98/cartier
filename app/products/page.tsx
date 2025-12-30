@@ -5,6 +5,7 @@ import Navigation from '../components/Navigation';
 import ProductCard from '../components/ProductCard';
 import ProductFilters, { FilterState } from '../components/ProductFilters';
 import ScrollFade from '../components/ScrollFade';
+import ParallaxSection from '../components/ParallaxSection';
 import Image from 'next/image';
 
 // Sample products with images - replace with your actual data
@@ -47,17 +48,20 @@ export default function ProductsPage() {
     <main className="min-h-screen bg-white">
       <Navigation />
       
-      {/* Hero Banner Section */}
+      {/* Hero Banner Section with Parallax */}
       <section className="relative pt-32 pb-24 px-6 lg:px-16 overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1920&q=80"
-            alt="Collections"
-            fill
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-black/40"></div>
-        </div>
+        <ParallaxSection speed={0.4} className="absolute inset-0">
+          <div className="relative w-full h-full">
+            <Image
+              src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1920&q=80"
+              alt="Collections"
+              fill
+              className="object-cover"
+              sizes="100vw"
+            />
+            <div className="absolute inset-0 bg-black/40"></div>
+          </div>
+        </ParallaxSection>
         <div className="relative z-10 max-w-[1920px] mx-auto text-center">
           <h1 className="text-7xl md:text-8xl lg:text-[10rem] font-serif font-bold mb-6 text-white leading-[0.9]">
             ALL COLLECTIONS

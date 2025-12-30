@@ -25,13 +25,13 @@ export default function ProductCard({ id, name, category, price, image, index }:
       <Link href={`/products/${id}`}>
         <div className="relative overflow-hidden bg-[#F5F5F5] aspect-[3/4] mb-6">
           <motion.div
-            whileHover={{ scale: 1.03 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="relative w-full h-full color-graded"
           >
             <div className="absolute inset-0 bg-gradient-to-t from-[#8B0000]/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.1),transparent)] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-            <div className="w-full h-full bg-gradient-to-br from-neutral-100 to-neutral-200 flex items-center justify-center">
+            <div className="relative w-full h-full bg-gradient-to-br from-neutral-100 to-neutral-200 flex items-center justify-center">
               {image ? (
                 <Image
                   src={image}

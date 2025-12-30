@@ -35,25 +35,6 @@
   @apply w-full border-b border-neutral-300 bg-transparent px-0 py-3 text-sm focus:border-neutral-900 focus:outline-none transition-colors;
 }
 
-/* Smooth Scrolling */
-html {
-  scroll-behavior: smooth;
-  overflow-x: hidden;
-}
-
-body {
-  overflow-x: hidden;
-  height: auto;
-  min-height: 100vh;
-}
-
-/* Ensure all pages are scrollable */
-main {
-  min-height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -74,7 +55,7 @@ main {
 }
 
 html {
-  scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {

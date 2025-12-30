@@ -3,6 +3,9 @@
 import Navigation from './components/Navigation';
 import Link from 'next/link';
 import ScrollFade from './components/ScrollFade';
+import ParallaxSection from './components/ParallaxSection';
+import HoverScaleImage from './components/HoverScaleImage';
+import VideoPlayer from './components/VideoPlayer';
 import Image from 'next/image';
 
 // Landing Page 1 - AESTHETIQUE Style
@@ -13,14 +16,13 @@ export default function Home() {
     <main className="min-h-screen" style={{ backgroundColor: '#f7f5f2' }}>
       <Navigation />
       
-      {/* Hero Section */}
+      {/* Hero Section with Parallax */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0">
-          {/* Hero Image Placeholder - Replace with actual image */}
+        <ParallaxSection speed={0.3} className="absolute inset-0">
           <div className="w-full h-full bg-gradient-to-br from-neutral-50 via-neutral-100 to-neutral-200" style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1920&q=80)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
             <div className="absolute inset-0 bg-black/20"></div>
           </div>
-        </div>
+        </ParallaxSection>
         
         <div className="relative z-10 max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-16 text-center">
           <p className="text-xs sm:text-sm uppercase tracking-[0.2em] mb-4" style={{ color: '#0b4d3b' }}>
@@ -44,17 +46,19 @@ export default function Home() {
         <div className="max-w-[1920px] mx-auto">
           <ScrollFade>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              {/* Left - Product Image */}
+              {/* Left - Product Image with Hover Scale */}
               <div className="relative">
                 <div className="aspect-square rounded-lg overflow-hidden relative border border-[#00000014]">
-                  <Image
+                  <HoverScaleImage
                     src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80"
                     alt="Serenity Lounge Chair"
+                    className="w-full h-full"
                     fill
-                    className="object-cover color-graded"
+                    scale={1.05}
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
-                  <div className="absolute inset-0 bg-black/5"></div>
-                  <div className="absolute top-4 right-4 px-3 py-1.5 rounded text-xs font-medium uppercase tracking-wider text-white" style={{ backgroundColor: '#0b4d3b' }}>
+                  <div className="absolute inset-0 bg-black/5 pointer-events-none"></div>
+                  <div className="absolute top-4 right-4 px-3 py-1.5 rounded text-xs font-medium uppercase tracking-wider text-white pointer-events-none z-10" style={{ backgroundColor: '#0b4d3b' }}>
                     Interactive 3D View
                   </div>
                 </div>
@@ -114,13 +118,15 @@ export default function Home() {
             <ScrollFade delay={0.2}>
               <Link href="/products?category=living" className="group block">
                 <div className="aspect-[4/5] rounded-lg overflow-hidden mb-4 relative border border-[#00000014]">
-                  <Image
+                  <HoverScaleImage
                     src="https://images.unsplash.com/photo-1556912172-45b7abe8b7e4?w=600&q=80"
                     alt="Living Room Collection"
+                    className="w-full h-full"
                     fill
-                    className="object-cover color-graded group-hover:scale-105 transition-transform duration-500"
+                    scale={1.05}
+                    sizes="(max-width: 768px) 100vw, 33vw"
                   />
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/5 transition-colors"></div>
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/5 transition-colors pointer-events-none"></div>
                 </div>
                 <h3 className="text-xl font-serif font-semibold text-neutral-900 mb-1 group-hover:opacity-70 transition-opacity">
                   Living Room
@@ -133,13 +139,15 @@ export default function Home() {
             <ScrollFade delay={0.3}>
               <Link href="/products?category=dining" className="group block">
                 <div className="aspect-[4/5] rounded-lg overflow-hidden mb-4 relative border border-[#00000014]">
-                  <Image
+                  <HoverScaleImage
                     src="https://images.unsplash.com/photo-1556911220-bff31c812dba?w=600&q=80"
                     alt="Dining Collection"
+                    className="w-full h-full"
                     fill
-                    className="object-cover color-graded group-hover:scale-105 transition-transform duration-500"
+                    scale={1.05}
+                    sizes="(max-width: 768px) 100vw, 33vw"
                   />
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/5 transition-colors"></div>
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/5 transition-colors pointer-events-none"></div>
                 </div>
                 <h3 className="text-xl font-serif font-semibold text-neutral-900 mb-1 group-hover:opacity-70 transition-opacity">
                   Dining
@@ -152,13 +160,15 @@ export default function Home() {
             <ScrollFade delay={0.4}>
               <Link href="/products?category=bedroom" className="group block">
                 <div className="aspect-[4/5] rounded-lg overflow-hidden mb-4 relative border border-[#00000014]">
-                  <Image
+                  <HoverScaleImage
                     src="https://images.unsplash.com/photo-1631889993957-20a90d5c79d1?w=600&q=80"
                     alt="Bedroom Collection"
+                    className="w-full h-full"
                     fill
-                    className="object-cover color-graded group-hover:scale-105 transition-transform duration-500"
+                    scale={1.05}
+                    sizes="(max-width: 768px) 100vw, 33vw"
                   />
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/5 transition-colors"></div>
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/5 transition-colors pointer-events-none"></div>
                 </div>
                 <h3 className="text-xl font-serif font-semibold text-neutral-900 mb-1 group-hover:opacity-70 transition-opacity">
                   Bedroom
@@ -167,6 +177,42 @@ export default function Home() {
               </Link>
             </ScrollFade>
           </div>
+        </div>
+      </section>
+
+      {/* Video Section */}
+      <section className="py-12 sm:py-16 lg:py-24 px-4 sm:px-6 lg:px-16" style={{ backgroundColor: '#f7f5f2' }}>
+        <div className="max-w-[1920px] mx-auto">
+          <ScrollFade delay={0.2}>
+            <div className="text-center mb-12">
+              <h2 className="text-4xl md:text-5xl font-serif font-bold text-neutral-900 mb-4">
+                Experience Luxury
+              </h2>
+              <p className="text-lg text-neutral-700 max-w-2xl mx-auto font-light">
+                Discover the craftsmanship and elegance that defines our collections
+              </p>
+            </div>
+          </ScrollFade>
+          <ScrollFade delay={0.3}>
+            <div className="relative aspect-video rounded-lg overflow-hidden border border-[#00000014]">
+              {/* Place your video file in public/videos/ directory */}
+              <VideoPlayer
+                src="/videos/showcase.mp4"
+                className="w-full h-full"
+                autoplay={true}
+                loop={true}
+                muted={true}
+                controls={false}
+              />
+              {/* Fallback if video doesn't exist */}
+              <div className="absolute inset-0 bg-gradient-to-br from-neutral-100 to-neutral-200 flex items-center justify-center">
+                <div className="text-center">
+                  <p className="text-sm text-neutral-500 mb-2">Video Player Ready</p>
+                  <p className="text-xs text-neutral-400">Place your video at: /public/videos/showcase.mp4</p>
+                </div>
+              </div>
+            </div>
+          </ScrollFade>
         </div>
       </section>
 

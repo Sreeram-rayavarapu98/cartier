@@ -177,7 +177,7 @@ export default function ModelViewerWithLoader({ modelPath, fallback }: ModelView
 
   return (
     <ModelErrorBoundary>
-      <div className="relative w-full h-full bg-gradient-to-br from-neutral-50 via-neutral-100 to-neutral-50 rounded-lg overflow-hidden">
+      <div className="relative w-full h-full bg-gradient-to-br from-neutral-50 via-neutral-100 to-neutral-50 rounded-lg overflow-hidden" style={{ touchAction: 'none' }}>
         <Suspense
           fallback={
             <div className="w-full h-full flex items-center justify-center">
@@ -201,21 +201,19 @@ export default function ModelViewerWithLoader({ modelPath, fallback }: ModelView
             }}
             dpr={[1, Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 2)]}
             frameloop="always"
-            style={{ background: '#f5f5f5' }}
-            onCreated={({ gl, events }) => {
-              // Enable touch events
-              gl.domElement.style.touchAction = 'none';
-              gl.domElement.style.userSelect = 'none';
-              gl.domElement.style.webkitUserSelect = 'none';
+            style={{ background: '#f5f5f5', touchAction: 'none' }}
+            onCreated={({ gl }) => {
+              // Critical: Disable default touch behaviors to allow 3D rotation
+              const canvas = gl.domElement;
+              // Set touchAction to none to prevent scrolling/zooming on the page
+              canvas.style.touchAction = 'none';
+              canvas.style.userSelect = 'none';
+              canvas.style.webkitUserSelect = 'none';
+              // @ts-ignore - webkitTouchCallout is a valid CSS property
+              canvas.style.webkitTouchCallout = 'none';
               
-              // Prevent default touch behaviors
-              const preventDefaults = (e: TouchEvent) => {
-                e.preventDefault();
-              };
-              
-              gl.domElement.addEventListener('touchstart', preventDefaults, { passive: false });
-              gl.domElement.addEventListener('touchmove', preventDefaults, { passive: false });
-              gl.domElement.addEventListener('touchend', preventDefaults, { passive: false });
+              // Ensure canvas can receive touch events
+              canvas.setAttribute('touch-action', 'none');
             }}
           >
             <color attach="background" args={['#f5f5f5']} />
@@ -235,19 +233,21 @@ export default function ModelViewerWithLoader({ modelPath, fallback }: ModelView
               minDistance={1}
               maxDistance={20}
               autoRotate={false}
-              dampingFactor={0.05}
+              dampingFactor={0.1}
               target={[0, 0, 0]}
               touches={{
-                ONE: 2, // Rotate (touch with one finger)
+                ONE: 0, // Rotate (touch with one finger)
                 TWO: 1, // Zoom (pinch with two fingers)
               }}
               mouseButtons={{
-                LEFT: 2, // Rotate
+                LEFT: 0, // Rotate (default)
                 MIDDLE: 1, // Zoom
-                RIGHT: 0, // Pan
+                RIGHT: 2, // Pan
               }}
               enableDamping={true}
               screenSpacePanning={false}
+              rotateSpeed={0.5}
+              zoomSpeed={0.8}
             />
           </Canvas>
         </Suspense>

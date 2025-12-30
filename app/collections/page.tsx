@@ -3,6 +3,8 @@
 import Navigation from '../components/Navigation';
 import Link from 'next/link';
 import ScrollFade from '../components/ScrollFade';
+import ParallaxSection from '../components/ParallaxSection';
+import HoverScaleImage from '../components/HoverScaleImage';
 import Image from 'next/image';
 
 // Collections Page - Theme: Opulent Ivory (p=#8b5e3c, bo=#00000014, b=#fbf9f6)
@@ -53,11 +55,13 @@ export default function CollectionsPage() {
           <ScrollFade delay={0.1}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div className="aspect-[4/3] rounded-lg overflow-hidden relative border border-[#00000014]">
-                <Image
+                <HoverScaleImage
                   src="https://images.unsplash.com/photo-1556912172-45b7abe8b7e4?w=1200&q=80"
                   alt="The Ethereal Collection"
+                  className="w-full h-full"
                   fill
-                  className="object-cover color-graded"
+                  scale={1.05}
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <div className="absolute bottom-4 left-4 px-3 py-1.5 rounded text-xs font-medium uppercase tracking-wider text-white" style={{ backgroundColor: '#8b5e3c' }}>
                   New Arrival
@@ -106,11 +110,13 @@ export default function CollectionsPage() {
                 </Link>
               </div>
               <div className="aspect-[4/3] rounded-lg overflow-hidden relative order-1 lg:order-2 border border-[#00000014]">
-                <Image
+                <HoverScaleImage
                   src="https://images.unsplash.com/photo-1556911220-bff31c812dba?w=1200&q=80"
                   alt="Obsidian & Gold Collection"
+                  className="w-full h-full"
                   fill
-                  className="object-cover color-graded"
+                  scale={1.05}
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
             </div>
@@ -120,11 +126,13 @@ export default function CollectionsPage() {
           <ScrollFade delay={0.3}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div className="aspect-[4/3] rounded-lg overflow-hidden relative border border-[#00000014]">
-                <Image
+                <HoverScaleImage
                   src="https://images.unsplash.com/photo-1556911220-bff31c812dba?w=1200&q=80"
                   alt="Nordic Heritage Collection"
+                  className="w-full h-full"
                   fill
-                  className="object-cover color-graded"
+                  scale={1.05}
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
               <div>
@@ -170,11 +178,13 @@ export default function CollectionsPage() {
                 </Link>
               </div>
               <div className="aspect-[4/3] rounded-lg overflow-hidden relative order-1 lg:order-2 border border-[#00000014]">
-                <Image
+                <HoverScaleImage
                   src="https://images.unsplash.com/photo-1631889993957-20a90d5c79d1?w=1200&q=80"
                   alt="Riviera Outdoor Collection"
+                  className="w-full h-full"
                   fill
-                  className="object-cover color-graded"
+                  scale={1.05}
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
             </div>
