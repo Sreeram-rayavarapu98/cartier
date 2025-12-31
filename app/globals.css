@@ -3,12 +3,17 @@
 :root {
   --background: #ffffff;
   --foreground: #1a1a1a;
+  --cartier-bg: #f7f5f2;
+  --cartier-text: #1a1a1a;
+  --cartier-text-light: #666666;
   --cartier-red: #8B0000;
   --cartier-red-dark: #6B0000;
   --cartier-red-light: #A00000;
   --cartier-gold: #D4AF37;
   --cartier-gold-light: #E5C158;
   --cartier-gold-dark: #B8941F;
+  --cartier-border: rgba(0, 0, 0, 0.05);
+  --cartier-hover: rgba(0, 0, 0, 0.03);
   --luxury-black: #0A0A0A;
   --luxury-gray: #2A2A2A;
   --luxury-light: #F5F5F5;
@@ -106,4 +111,151 @@ h1, h2, h3, h4, h5, h6 {
   background: linear-gradient(135deg, rgba(139, 0, 0, 0.15) 0%, rgba(212, 175, 55, 0.1) 100%);
   mix-blend-mode: overlay;
   pointer-events: none;
+}
+
+/* Modern Luxury Typography System */
+.heading-hero {
+  font-size: clamp(3rem, 10vw, 8rem);
+  letter-spacing: -0.03em;
+  font-weight: 600;
+  font-family: var(--font-playfair), serif;
+  line-height: 1.05;
+}
+
+.heading-xl {
+  font-size: clamp(2.25rem, 6vw, 4.5rem);
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  font-family: var(--font-playfair), serif;
+  line-height: 1.1;
+}
+
+.heading-lg {
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  letter-spacing: -0.01em;
+  font-weight: 600;
+  font-family: var(--font-playfair), serif;
+  line-height: 1.15;
+}
+
+.heading-md {
+  font-size: clamp(1.375rem, 3vw, 2.25rem);
+  letter-spacing: -0.01em;
+  font-weight: 600;
+  font-family: var(--font-playfair), serif;
+  line-height: 1.2;
+}
+
+.body-lg {
+  font-size: 1.1875rem;
+  line-height: 1.75;
+  font-weight: 400;
+  font-family: var(--font-inter), sans-serif;
+  color: #4a4a4a;
+}
+
+.body-md {
+  font-size: 1rem;
+  line-height: 1.65;
+  font-weight: 400;
+  font-family: var(--font-inter), sans-serif;
+}
+
+.body-sm {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  font-weight: 400;
+  font-family: var(--font-inter), sans-serif;
+}
+
+.label-sm {
+  font-size: 0.8125rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-family: var(--font-inter), sans-serif;
+}
+
+.label-xs {
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-family: var(--font-inter), sans-serif;
+}
+
+/* Modern Luxury Button Styles */
+.btn-luxury {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  overflow: hidden;
+}
+
+.btn-luxury::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.btn-luxury:hover::before {
+  opacity: 1;
+}
+
+.btn-luxury-primary {
+  background: linear-gradient(135deg, #8B0000 0%, #A00000 100%);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 20px rgba(139, 0, 0, 0.25);
+}
+
+.btn-luxury-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(139, 0, 0, 0.35);
+}
+
+.btn-luxury-secondary {
+  background: transparent;
+  color: #1a1a1a;
+  border: 2px solid #1a1a1a;
+}
+
+.btn-luxury-secondary:hover {
+  background: #1a1a1a;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Subtle hover underline effect */
+.hover-underline {
+  position: relative;
+}
+
+.hover-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.hover-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }

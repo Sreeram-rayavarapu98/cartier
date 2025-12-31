@@ -5,14 +5,29 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SearchOverlay from './SearchOverlay';
 
+const navItems = [
+  { href: '/products', label: 'Collections' },
+  { href: '/maison', label: 'Maison' },
+  { href: '/services', label: 'Services' },
+];
+
+const collectionQuickLinks = [
+  { href: '/collections/ethereal', label: 'Ethereal' },
+  { href: '/collections/obsidian-gold', label: 'Obsidian & Gold' },
+  { href: '/collections/riviera', label: 'Riviera Outdoor' },
+  { href: '/collections/nordic', label: 'Nordic Heritage' },
+];
+
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
+      setHoveredMenu(null);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -28,22 +43,56 @@ export default function Navigation() {
           : 'bg-transparent'
       }`}
     >
-      <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-16">
-        <div className="flex items-center justify-between h-20 sm:h-24">
-          <Link href="/" className="text-xl sm:text-2xl font-sans font-bold tracking-tight text-neutral-900">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
+        <div className="flex items-center justify-between h-20">
+          <Link href="/" className="text-lg font-sans font-medium tracking-tight text-neutral-900 transition-opacity duration-300 hover:opacity-70">
             AESTHETIQUE
           </Link>
           
           <div className="hidden lg:flex items-center gap-12">
-            <Link href="/products" className="text-xs font-medium uppercase tracking-[0.15em] text-neutral-900 hover:opacity-70 transition-opacity">
-              Collections
-            </Link>
-            <Link href="/maison" className="text-xs font-medium uppercase tracking-[0.15em] text-neutral-900 hover:opacity-70 transition-opacity">
-              Maison
-            </Link>
-            <Link href="/services" className="text-xs font-medium uppercase tracking-[0.15em] text-neutral-900 hover:opacity-70 transition-opacity">
-              Services
-            </Link>
+            {navItems.map((item) => (
+              <div
+                key={item.href}
+                className="relative group"
+                onMouseEnter={() => setHoveredMenu(item.label === 'Collections' ? 'collections' : null)}
+                onMouseLeave={() => setHoveredMenu(null)}
+              >
+                <Link
+                  href={item.href}
+                  className="label-sm text-neutral-900 transition-opacity duration-400 hover:opacity-70"
+                >
+                  <span className="relative inline-block">
+                    {item.label}
+                    <span className="absolute left-0 -bottom-1 h-px w-full bg-neutral-900 origin-left scale-x-0 transition-transform duration-400 ease-in-out group-hover:scale-x-100" />
+                  </span>
+                </Link>
+
+                <AnimatePresence>
+                  {hoveredMenu === 'collections' && item.label === 'Collections' && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 6 }}
+                      transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+                      className="absolute left-0 mt-4 w-64 bg-white/95 backdrop-blur-lg shadow-xl border border-neutral-100 rounded-lg p-4"
+                    >
+                      <div className="text-xs uppercase tracking-[0.2em] text-neutral-500 mb-3">Featured</div>
+                      <div className="flex flex-col gap-2">
+                        {collectionQuickLinks.map((link) => (
+                          <Link
+                            key={link.href}
+                            href={link.href}
+                            className="text-sm text-neutral-900 hover:text-neutral-700 transition-colors"
+                          >
+                            {link.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
           </div>
 
           <div className="hidden lg:flex items-center gap-6">
@@ -107,24 +156,39 @@ export default function Navigation() {
         </div>
       </div>
 
+      {/* Desktop hover backdrop */}
+
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-white border-t border-neutral-100"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 lg:hidden bg-black/30 backdrop-blur-sm"
+            onClick={() => setIsMenuOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-[#f7f5f2] min-h-screen pt-24"
           >
-            <div className="flex flex-col gap-4 p-6">
-              <Link href="/" className="text-sm font-medium uppercase tracking-wider py-2" onClick={() => setIsMenuOpen(false)}>Home</Link>
-              <Link href="/products" className="text-sm font-medium uppercase tracking-wider py-2" onClick={() => setIsMenuOpen(false)}>Collections</Link>
-              <Link href="/maison" className="text-sm font-medium uppercase tracking-wider py-2" onClick={() => setIsMenuOpen(false)}>Maison</Link>
-              <Link href="/services" className="text-sm font-medium uppercase tracking-wider py-2" onClick={() => setIsMenuOpen(false)}>Services</Link>
-              <Link href="/login" className="text-sm font-medium uppercase tracking-wider py-2" onClick={() => setIsMenuOpen(false)}>Account</Link>
+            <div className="px-6 flex flex-col gap-4">
+              <Link href="/" className="text-lg font-medium uppercase tracking-[0.2em] py-3 border-b border-neutral-200" onClick={() => setIsMenuOpen(false)}>Home</Link>
+              <Link href="/products" className="text-lg font-medium uppercase tracking-[0.2em] py-3 border-b border-neutral-200" onClick={() => setIsMenuOpen(false)}>Collections</Link>
+              <Link href="/maison" className="text-lg font-medium uppercase tracking-[0.2em] py-3 border-b border-neutral-200" onClick={() => setIsMenuOpen(false)}>Maison</Link>
+              <Link href="/services" className="text-lg font-medium uppercase tracking-[0.2em] py-3 border-b border-neutral-200" onClick={() => setIsMenuOpen(false)}>Services</Link>
+              <Link href="/login" className="text-lg font-medium uppercase tracking-[0.2em] py-3 border-b border-neutral-200" onClick={() => setIsMenuOpen(false)}>Account</Link>
             </div>
           </motion.div>
         )}
-          </AnimatePresence>
+      </AnimatePresence>
       
       <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </motion.nav>

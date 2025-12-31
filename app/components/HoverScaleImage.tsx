@@ -34,8 +34,9 @@ export default function HoverScaleImage({
   return (
     <motion.div
       className={`relative overflow-hidden ${className}`}
-      whileHover={{ scale }}
-      transition={{ duration, ease: [0.22, 1, 0.36, 1] }}
+      initial={{ opacity: 1 }}
+      whileHover={{ opacity: 0.95 }}
+      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
     >
       {!imgError ? (
         fill ? (

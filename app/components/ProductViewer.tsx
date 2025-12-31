@@ -189,6 +189,7 @@ function Loader() {
   );
 }
 
+
 export default function ProductViewer({ 
   modelPath, 
   designStates = [],
@@ -202,9 +203,17 @@ export default function ProductViewer({
   const [modelError, setModelError] = useState<string | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [webglSupported, setWebglSupported] = useState(true);
 
   useEffect(() => {
     setMounted(true);
+    try {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      setWebglSupported(!!gl);
+    } catch {
+      setWebglSupported(false);
+    }
   }, []);
 
   // Only enable scroll tracking for mobile, and only after component is mounted
@@ -304,15 +313,26 @@ export default function ProductViewer({
     );
   }
 
-  const viewerHeight = isMobile ? 'h-[100vh]' : 'h-[600px] lg:h-[800px]';
+  const outerHeight = isMobile ? 'min-h-[140vh]' : 'h-auto';
+  const stickyHeight = isMobile ? 'h-[65vh]' : 'h-[600px] lg:h-[800px]';
 
   return (
     <ModelErrorBoundary>
       <div 
         ref={containerRef}
-        className={`relative w-full ${viewerHeight} bg-gradient-to-br from-neutral-50 via-neutral-100 to-neutral-50 overflow-hidden rounded-lg ${className}`}
+        className={`relative w-full ${outerHeight} bg-gradient-to-br from-neutral-50 via-neutral-100 to-neutral-50 overflow-hidden rounded-lg ${className}`}
         style={{ touchAction: 'none' }}
       >
+        {!webglSupported && (
+          <div className="absolute inset-0 flex items-center justify-center bg-neutral-100">
+            {fallback || (
+              <div className="text-center space-y-3">
+                <p className="text-sm text-neutral-700 uppercase tracking-[0.2em]">3D view unavailable</p>
+                <p className="text-xs text-neutral-500">Your device does not support WebGL. Please view on a newer browser.</p>
+              </div>
+            )}
+          </div>
+        )}
         <Suspense
           fallback={
             <div className="w-full h-full flex items-center justify-center">
@@ -325,82 +345,84 @@ export default function ProductViewer({
             </div>
           }
         >
-          <Canvas
-            key={currentModelPath}
-            camera={{ position: [0, 0, 5], fov: 50 }}
-            gl={{
-              antialias: true,
-              alpha: false,
-              powerPreference: 'high-performance',
-              preserveDrawingBuffer: false,
-            }}
-            dpr={[1, Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 2)]}
-            frameloop="always"
-            style={{ background: 'transparent' }}
-            onCreated={({ gl }) => {
-              const canvas = gl.domElement;
-              canvas.style.touchAction = 'none';
-              canvas.style.userSelect = 'none';
-              canvas.style.webkitUserSelect = 'none';
-              canvas.setAttribute('touch-action', 'none');
-            }}
-          >
-            <color attach="background" args={['#f5f5f5']} />
-            <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={50} />
-            <Environment preset="studio" />
-            <ambientLight intensity={0.8} />
-            <directionalLight position={[10, 10, 5]} intensity={1.5} castShadow />
-            <directionalLight position={[-10, 5, -5]} intensity={0.8} />
-            <pointLight position={[0, 10, 0]} intensity={0.5} />
-            
-            {/* Soft shadow plane */}
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -2, 0]} receiveShadow>
-              <planeGeometry args={[10, 10]} />
-              <shadowMaterial opacity={0.2} />
-            </mesh>
+          <div className={`${isMobile ? 'sticky top-16' : ''} ${stickyHeight}`}>
+            <Canvas
+              key={currentModelPath}
+              camera={{ position: [0, 0, 5], fov: 50 }}
+              gl={{
+                antialias: true,
+                alpha: false,
+                powerPreference: 'high-performance',
+                preserveDrawingBuffer: false,
+              }}
+              dpr={[1, Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 2)]}
+              frameloop="always"
+              style={{ background: 'transparent' }}
+              onCreated={({ gl }) => {
+                const canvas = gl.domElement;
+                canvas.style.touchAction = 'none';
+                canvas.style.userSelect = 'none';
+                canvas.style.webkitUserSelect = 'none';
+                canvas.setAttribute('touch-action', 'none');
+              }}
+            >
+              <color attach="background" args={['#f5f5f5']} />
+              <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={50} />
+              <Environment preset="studio" />
+              <ambientLight intensity={0.9} />
+              <directionalLight position={[10, 10, 5]} intensity={1.35} castShadow />
+              <directionalLight position={[-10, 5, -5]} intensity={0.9} />
+              <pointLight position={[0, 10, 0]} intensity={0.45} />
+              
+              {/* Soft shadow plane */}
+              <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -2, 0]} receiveShadow>
+                <planeGeometry args={[10, 10]} />
+                <shadowMaterial opacity={0.18} />
+              </mesh>
 
-            <Suspense fallback={<Loader />}>
-              <AnimatedModel 
-                modelPath={currentModelPath}
-                designStateIndex={currentStateIndex}
-                scrollProgress={scrollProgress}
-                animationType={currentAnimationType}
+              <Suspense fallback={<Loader />}>
+                <AnimatedModel 
+                  modelPath={currentModelPath}
+                  designStateIndex={currentStateIndex}
+                  scrollProgress={scrollProgress}
+                  animationType={currentAnimationType}
+                />
+              </Suspense>
+
+              <OrbitControls
+                ref={(ref) => {
+                  if (ref) {
+                    // Store ref for double tap reset
+                    (window as any).__orbitControlsRef = ref;
+                  }
+                }}
+                enablePan={false}
+                enableZoom={true}
+                enableRotate={true}
+                minDistance={2}
+                maxDistance={6}
+                autoRotate={false}
+                dampingFactor={0.05}
+                target={[0, 0, 0]}
+                touches={{
+                  ONE: 0, // Rotate
+                  TWO: 1, // Zoom
+                }}
+                mouseButtons={{
+                  LEFT: 0, // Rotate
+                  MIDDLE: 1, // Zoom
+                  RIGHT: 2, // Pan
+                }}
+                enableDamping={true}
+                screenSpacePanning={false}
+                rotateSpeed={0.7}
+                zoomSpeed={0.75}
               />
-            </Suspense>
-
-            <OrbitControls
-              ref={(ref) => {
-                if (ref) {
-                  // Store ref for double tap reset
-                  (window as any).__orbitControlsRef = ref;
-                }
-              }}
-              enablePan={true}
-              enableZoom={true}
-              enableRotate={true}
-              minDistance={1}
-              maxDistance={20}
-              autoRotate={false}
-              dampingFactor={0.1}
-              target={[0, 0, 0]}
-              touches={{
-                ONE: 0, // Rotate
-                TWO: 1, // Zoom
-              }}
-              mouseButtons={{
-                LEFT: 0, // Rotate
-                MIDDLE: 1, // Zoom
-                RIGHT: 2, // Pan
-              }}
-              enableDamping={true}
-              screenSpacePanning={false}
-              rotateSpeed={0.5}
-              zoomSpeed={0.8}
-            />
-            
-            {/* Double tap to reset - handled via canvas event */}
-            <DoubleTapReset />
-          </Canvas>
+              
+              {/* Double tap to reset - handled via canvas event */}
+              <DoubleTapReset />
+            </Canvas>
+          </div>
         </Suspense>
 
         {/* Minimal UI Indicator - Desktop */}

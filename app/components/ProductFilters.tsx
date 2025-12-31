@@ -14,9 +14,9 @@ export interface FilterState {
   color: string[];
 }
 
-const categories = ['Seating', 'Tables', 'Storage', 'Lighting', 'Accessories'];
-const materials = ['Leather', 'Wood', 'Metal', 'Fabric', 'Marble', 'Glass'];
-const colors = ['Black', 'White', 'Brown', 'Gray', 'Beige', 'Gold'];
+const categories = ['Seating', 'Tables', 'Storage', 'Lighting', 'Accessories', 'Outdoor'];
+const materials = ['Leather', 'Wood', 'Metal', 'Fabric', 'Marble', 'Glass', 'Stone'];
+const colors = ['Black', 'White', 'Brown', 'Gray', 'Beige', 'Gold', 'Green', 'Blue'];
 
 export default function ProductFilters({ onFilterChange }: ProductFiltersProps) {
   const [isOpen, setIsOpen] = useState(false);
