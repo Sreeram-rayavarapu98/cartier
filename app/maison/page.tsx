@@ -4,6 +4,7 @@ import Navigation from '../components/Navigation';
 import ScrollFade from '../components/ScrollFade';
 import ParallaxSection from '../components/ParallaxSection';
 import HoverScaleImage from '../components/HoverScaleImage';
+import ScrollImageGrid from '../components/ScrollImageGrid';
 import Image from 'next/image';
 
 // The Maison Page - Philosophy/About
@@ -126,23 +127,27 @@ export default function MaisonPage() {
         </div>
       </section>
 
-      {/* Textured Background Section */}
-      <section className="py-24 px-6 lg:px-16">
-        <ScrollFade delay={0.4}>
-          <div className="max-w-[1920px] mx-auto">
-            <div className="aspect-[21/9] bg-neutral-900 rounded-lg overflow-hidden relative">
-              <HoverScaleImage
-                src="https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=1920&q=80"
-                alt="Natural Stone Texture"
-                className="w-full h-full"
-                fill
-                scale={1.02}
-                sizes="100vw"
-              />
-            </div>
-          </div>
-        </ScrollFade>
-      </section>
+      {/* Scroll Image Grid Section */}
+      <div className="content-wrap bg-black">
+        <header className="min-h-screen flex flex-col justify-center items-start px-6 lg:px-16" style={{ maxWidth: 'calc(100% - 4rem)', paddingLeft: '48px' }}>
+          <h1 className="fluid text-white mb-6" style={{ lineHeight: 0.6 }}>
+            let's<br />scroll.
+          </h1>
+          <h2 className="fluid text-white/70" style={{ fontSize: 'clamp(0.5rem, 2vw, 1.5rem)', paddingTop: '48px' }}>
+            Originally from{' '}
+            <a href="https://codepen.io/jh3y/pen/VYZwOwd" target="_blank" rel="noopener noreferrer" className="text-white underline hover:text-white/80 transition-colors">
+              Jhey →
+            </a>
+            , converted to Motion
+          </h2>
+        </header>
+        <ScrollImageGrid />
+        <section className="min-h-screen flex items-center justify-center">
+          <h2 className="fluid text-white" style={{ lineHeight: 0.6 }}>
+            fin.
+          </h2>
+        </section>
+      </div>
 
       {/* Brand Values Section */}
       <section className="py-24 px-6 lg:px-16" style={{ backgroundColor: '#fffdf9' }}>

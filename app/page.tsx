@@ -7,6 +7,8 @@ import ParallaxSection from './components/ParallaxSection';
 import HoverScaleImage from './components/HoverScaleImage';
 import VideoPlayer from './components/VideoPlayer';
 import Image from 'next/image';
+import { ImagesSlider } from './components/ui/images-slider';
+import { motion } from 'framer-motion';
 
 // Landing Page 1 - AESTHETIQUE Style
 // Theme: Lux Linen (p=#0b4d3b, bo=#00000014, b=#f7f5f2)
@@ -16,38 +18,46 @@ export default function Home() {
     <main className="min-h-screen" style={{ backgroundColor: '#f7f5f2' }}>
       <Navigation />
       
-      {/* Hero Section with Parallax - Landscape Image */}
+      {/* Hero Section with Image Slider */}
       <section className="relative min-h-[95vh] flex items-center justify-center overflow-hidden">
-        <ParallaxSection speed={0.3} className="absolute inset-0">
-          <div 
-            className="w-full h-full" 
-            style={{ 
-              backgroundImage: 'url(https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1920&h=1080&q=85&fit=crop)', 
-              backgroundSize: 'cover', 
-              backgroundPosition: 'center' 
-            }}
+        <div className="absolute inset-0 z-0">
+          <ImagesSlider 
+            className="h-full w-full"
+            images={[
+              "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1920&h=1080&q=85&fit=crop",
+              "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1920&h=1080&q=85&fit=crop",
+              "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1920&h=1080&q=85&fit=crop",
+              "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1920&h=1080&q=85&fit=crop",
+            ]}
+            overlay={true}
+            overlayClassName="bg-gradient-to-b from-black/40 via-black/20 to-black/50"
+            autoplay={true}
+            direction="up"
           >
-            <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/40"></div>
-          </div>
-        </ParallaxSection>
-        
-        <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12 text-center">
-          <p className="label-sm mb-8 text-white/90">
-            NEW COLLECTION 2025
-          </p>
-          <h1 className="heading-hero mb-10 text-white px-4">
-            The Essence of Modern Living
-          </h1>
-          <Link
-            href="/products"
-            className="inline-block px-10 py-5 label-sm text-white transition-all duration-400 hover:translate-y-[-3px] hover:shadow-2xl"
-            style={{ 
-              background: 'linear-gradient(135deg, #8B0000 0%, #A00000 100%)',
-              boxShadow: '0 4px 25px rgba(139, 0, 0, 0.35)'
-            }}
-          >
-            Discover Collection
-          </Link>
+            <motion.div
+              initial={{ opacity: 0, y: -80 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="z-50 flex flex-col justify-center items-center"
+            >
+              <p className="label-sm mb-8 text-white/90">
+                NEW COLLECTION 2025
+              </p>
+              <h1 className="heading-hero mb-10 text-white px-4">
+                The Essence of Modern Living
+              </h1>
+              <Link
+                href="/products"
+                className="inline-block px-10 py-5 label-sm text-white transition-all duration-400 hover:translate-y-[-3px] hover:shadow-2xl"
+                style={{ 
+                  background: 'linear-gradient(135deg, #8B0000 0%, #A00000 100%)',
+                  boxShadow: '0 4px 25px rgba(139, 0, 0, 0.35)'
+                }}
+              >
+                Discover Collection
+              </Link>
+            </motion.div>
+          </ImagesSlider>
         </div>
       </section>
 

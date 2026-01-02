@@ -3,6 +3,7 @@ import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import SuppressHydrationWarning from "./components/SuppressHydrationWarning";
 import PageTransition from "./components/PageTransition";
+import ScrollSmootherWrapper from "./components/ScrollSmootherWrapper";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -38,7 +39,9 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <SuppressHydrationWarning />
-        <PageTransition>{children}</PageTransition>
+        <ScrollSmootherWrapper>
+          <PageTransition>{children}</PageTransition>
+        </ScrollSmootherWrapper>
       </body>
     </html>
   );
