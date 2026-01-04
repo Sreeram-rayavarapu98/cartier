@@ -1,7 +1,8 @@
 "use client";
-import { cn } from "../../lib/utils";
-import { motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
+import React, { useEffect, useState, useCallback } from "react";
+import Image from "next/image";
 
 export const ImagesSlider = ({
   images,
@@ -10,134 +11,125 @@ export const ImagesSlider = ({
   overlayClassName,
   className,
   autoplay = true,
-  direction = "up",
+  interval = 5000,
 }: {
   images: string[];
   children?: React.ReactNode;
-  overlay?: React.ReactNode | boolean;
+  overlay?: boolean;
   overlayClassName?: string;
   className?: string;
   autoplay?: boolean;
-  direction?: "up" | "down";
+  interval?: number;
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loadedImages, setLoadedImages] = useState<string[]>([]);
-  const [directionState, setDirectionState] = useState<"up" | "down">(direction);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleNext = () => {
-    setDirectionState("up");
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-  };
+  const handleNext = useCallback(() => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex + 1 === images.length ? 0 : prevIndex + 1
+    );
+  }, [images.length]);
 
-  const handlePrevious = () => {
-    setDirectionState("down");
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
-  };
+  const handlePrevious = useCallback(() => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex - 1 < 0 ? images.length - 1 : prevIndex - 1
+    );
+  }, [images.length]);
 
   useEffect(() => {
-    const loadImages = () => {
+    // Preload all images before showing
+    const loadImages = async () => {
       const loadPromises = images.map((image) => {
         return new Promise<string>((resolve, reject) => {
-          const img = new Image();
+          const img = new window.Image();
+          img.src = image;
           img.onload = () => resolve(image);
           img.onerror = reject;
-          img.src = image;
         });
       });
 
-      Promise.all(loadPromises)
-        .then((loaded) => setLoadedImages(loaded))
-        .catch((error) => console.error("Failed to load images", error));
+      try {
+        const loaded = await Promise.all(loadPromises);
+        setLoadedImages(loaded);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Failed to load images", error);
+        setLoadedImages(images);
+        setIsLoading(false);
+      }
     };
     loadImages();
   }, [images]);
 
   useEffect(() => {
-    if (autoplay) {
-      const interval = setInterval(() => {
+    if (isLoading) return;
+    
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowRight") {
         handleNext();
-      }, 5000);
-      return () => clearInterval(interval);
+      } else if (event.key === "ArrowLeft") {
+        handlePrevious();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    let intervalId: NodeJS.Timeout | undefined;
+    if (autoplay) {
+      intervalId = setInterval(() => {
+        handleNext();
+      }, interval);
     }
-  }, [autoplay]);
 
-  const slideVariants = {
-    initial: {
-      scale: 0,
-      opacity: 0,
-      rotateX: directionState === "up" ? 15 : -15,
-    },
-    visible: {
-      scale: 1,
-      rotateX: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        ease: [0.645, 0.045, 0.355, 1.0],
-      },
-    },
-    upExit: {
-      opacity: 0,
-      scale: 0,
-      rotateX: -15,
-      transition: {
-        duration: 0.5,
-      },
-    },
-    downExit: {
-      opacity: 0,
-      scale: 0,
-      rotateX: 15,
-      transition: {
-        duration: 0.5,
-      },
-    },
-  };
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [autoplay, handleNext, handlePrevious, interval, isLoading]);
 
-  const areImagesLoaded = loadedImages.length > 0;
+  // Preload next image
+  const nextIndex = currentIndex + 1 === images.length ? 0 : currentIndex + 1;
 
   return (
     <div
       className={cn(
-        "overflow-hidden h-full w-full relative flex items-center justify-center",
+        "overflow-hidden h-screen w-full relative flex items-center justify-center",
         className
       )}
-      style={{
-        perspective: "1000px",
-      }}
+      style={{ backgroundColor: '#1a1a1a' }}
     >
-      {areImagesLoaded && (
-        <>
-          {overlay && (
-            <div
-              className={cn(
-                "absolute inset-0 bg-black/60 z-40",
-                overlayClassName
-              )}
-            />
-          )}
-
-          <motion.img
-            key={currentIndex}
-            src={loadedImages[currentIndex]}
-            initial="initial"
-            animate="visible"
-            exit={directionState === "up" ? "upExit" : "downExit"}
-            variants={slideVariants}
-            className="image h-full w-full absolute inset-0 object-cover object-center"
-            draggable={false}
+      {/* Always show all images stacked, control visibility with opacity */}
+      {loadedImages.map((src, index) => (
+        <div
+          key={src}
+          className="absolute inset-0 transition-opacity duration-1000 ease-in-out"
+          style={{ 
+            opacity: index === currentIndex ? 1 : 0,
+            zIndex: index === currentIndex ? 1 : 0 
+          }}
+        >
+          <Image
+            src={src}
+            alt={`Slide ${index + 1}`}
+            fill
+            className="object-cover"
+            priority={index === 0 || index === nextIndex}
+            sizes="100vw"
           />
-
-          {children}
-        </>
-      )}
-
-      {!areImagesLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-12 h-12 border-4 border-neutral-300 border-t-[#8B0000] rounded-full animate-spin" />
         </div>
+      ))}
+
+      {overlay && (
+        <div
+          className={cn(
+            "absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/60 z-10",
+            overlayClassName
+          )}
+        />
       )}
+
+      {!isLoading && children}
     </div>
   );
 };
-

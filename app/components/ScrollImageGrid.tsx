@@ -1,98 +1,83 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { animate, scroll, cubicBezier } from 'motion/react';
+import { useEffect, useRef, useState } from 'react';
+import { useScroll, useTransform, motion } from 'framer-motion';
 
 export default function ScrollImageGrid() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
-  const layersRef = useRef<HTMLDivElement[]>([]);
+  const [naturalSize, setNaturalSize] = useState({ width: 0, height: 0 });
+  const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) {
-      console.log('Reduced motion preference detected - skipping animations');
-      return;
-    }
-
-    const image = imageRef.current;
-    const firstSection = sectionRef.current;
-    const layers = layersRef.current;
-
-    if (!image || !firstSection || layers.length === 0) return;
-
-    // Set initial state - center image full screen
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-    image.style.width = `${viewportWidth}px`;
-    image.style.height = `${viewportHeight}px`;
-
-    // Set initial state for layers - hidden (already set via inline styles)
-
-    // Measure the natural size after a brief delay to ensure layout is complete
-    setTimeout(() => {
-      const naturalWidth = image.offsetWidth;
-      const naturalHeight = image.offsetHeight;
-
-    // Animate image on scroll - shrink from full screen to natural size
-    scroll(
-      animate(image, {
-        width: [viewportWidth, naturalWidth],
-        height: [viewportHeight, naturalHeight]
-      }, {
-        width: { easing: cubicBezier(0.65, 0, 0.35, 1) },   // GSAP power2.inOut
-        height: { easing: cubicBezier(0.42, 0, 0.58, 1) }   // GSAP power1.inOut
-      }),
-      {
-        target: firstSection,
-        offset: ['start start', '80% end end'] 
-      }
-    );
-
-    // Animate each layer with staggered timing
-    // Different easing per layer: power1, power3, power4
-    const scaleEasings = [
-      cubicBezier(0.42, 0, 0.58, 1),  // Layer 1: GSAP power1.inOut
-      cubicBezier(0.76, 0, 0.24, 1),  // Layer 2: GSAP power3.inOut
-      cubicBezier(0.87, 0, 0.13, 1)   // Layer 3: GSAP power4.inOut
-    ];
+    setViewportSize({ width: window.innerWidth, height: window.innerHeight });
     
-    layers.forEach((layer, index) => {
-      // Calculate different end points for each layer
-      const endOffset = `${1 - (index * 0.05)} end`;
-      
-      // fade: opacity stays 0 until 55% of scroll progress, then fades to 1
-      scroll(
-        animate(layer, {
-          opacity: [0, 0, 1]
-        }, {
-          offset: [0, 0.55, 1],  // Hold at 0 until 55%, then animate to 1
-          easing: cubicBezier(0.61, 1, 0.88, 1)  // GSAP sine.out
-        }),
-        {
-          target: firstSection,
-          offset: ['start start', endOffset]
-        }
-      );
-      
-      // reveal: scale stays 0 until 30% of scroll progress, then scales to 1
-      scroll(
-        animate(layer, {
-          scale: [0, 0, 1]
-        }, {
-          offset: [0, 0.3, 1],   // Hold at 0 until 30%, then animate to 1
-          easing: scaleEasings[index]  // Different power curve per layer
-        }),
-        {
-          target: firstSection,
-          offset: ['start start', endOffset]
-        }
-      );
-    });
-    }, 100);
+    const handleResize = () => {
+      setViewportSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  useEffect(() => {
+    // Measure natural size after initial render
+    const measureNaturalSize = () => {
+      if (!imageRef.current) return;
+      const img = imageRef.current;
+      const parent = img.parentElement;
+      if (parent) {
+        const parentRect = parent.getBoundingClientRect();
+        // Natural size should be based on grid cell size
+        // Grid has 5 columns, so each cell is approximately 1/5 of container width
+        const gridCellWidth = parentRect.width / 5; // 5 columns
+        const gridCellHeight = gridCellWidth * (4/5); // 4:5 aspect ratio based on CSS
+        setNaturalSize({ 
+          width: gridCellWidth || 400, 
+          height: gridCellHeight || 500 
+        });
+      }
+    };
+    
+    // Measure immediately and after layout
+    measureNaturalSize();
+    const timer = setTimeout(measureNaturalSize, 200);
+    window.addEventListener('resize', measureNaturalSize);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', measureNaturalSize);
+    };
+  }, []);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'] // Start earlier - when section bottom enters viewport
+  });
+
+  // Center image animation - shrink from full screen to natural size
+  // Start immediately (0) and complete by 60% scroll progress
+  const imageWidth = useTransform(
+    scrollYProgress,
+    [0, 0.6],
+    [viewportSize.width || 1920, naturalSize.width || 400]
+  );
+  const imageHeight = useTransform(
+    scrollYProgress,
+    [0, 0.6],
+    [viewportSize.height || 1080, naturalSize.height || 500]
+  );
+
+  // Layer animations - fade and scale - start earlier
+  // Opacity: hold at 0 until 40% scroll, then fade to 1 by 80%
+  const layer1Opacity = useTransform(scrollYProgress, [0, 0.4, 0.8], [0, 0, 1]);
+  // Scale: hold at 0 until 20% scroll, then scale to 1 by 70%
+  const layer1Scale = useTransform(scrollYProgress, [0, 0.2, 0.7], [0, 0, 1]);
+  
+  const layer2Opacity = useTransform(scrollYProgress, [0, 0.4, 0.75], [0, 0, 1]);
+  const layer2Scale = useTransform(scrollYProgress, [0, 0.2, 0.65], [0, 0, 1]);
+  
+  const layer3Opacity = useTransform(scrollYProgress, [0, 0.4, 0.7], [0, 0, 1]);
+  const layer3Scale = useTransform(scrollYProgress, [0, 0.2, 0.6], [0, 0, 1]);
 
   const images = {
     layer1: [
@@ -124,40 +109,40 @@ export default function ScrollImageGrid() {
         <div className="content">
           <div className="grid">
             {/* Layer 1: Outer edges (6 images) */}
-            <div
-              ref={(el) => {
-                if (el) layersRef.current[0] = el;
-              }}
+            <motion.div
               className="layer"
-              style={{ opacity: 0, transform: 'scale(0)' }}
+              style={{ 
+                opacity: layer1Opacity,
+                scale: layer1Scale
+              }}
             >
               {images.layer1.map((src, idx) => (
                 <div key={idx}>
                   <img src={src} alt="" />
                 </div>
               ))}
-            </div>
+            </motion.div>
             {/* Layer 2: Inner columns (6 images) */}
-            <div
-              ref={(el) => {
-                if (el) layersRef.current[1] = el;
-              }}
+            <motion.div
               className="layer"
-              style={{ opacity: 0, transform: 'scale(0)' }}
+              style={{ 
+                opacity: layer2Opacity,
+                scale: layer2Scale
+              }}
             >
               {images.layer2.map((src, idx) => (
                 <div key={idx}>
                   <img src={src} alt="" />
                 </div>
               ))}
-            </div>
+            </motion.div>
             {/* Layer 3: Center column top and bottom (2 images) */}
-            <div
-              ref={(el) => {
-                if (el) layersRef.current[2] = el;
-              }}
+            <motion.div
               className="layer"
-              style={{ opacity: 0, transform: 'scale(0)' }}
+              style={{ 
+                opacity: layer3Opacity,
+                scale: layer3Scale
+              }}
             >
               <div>
                 <img src={images.layer3[0]} alt="" />
@@ -165,16 +150,16 @@ export default function ScrollImageGrid() {
               <div>
                 <img src={images.layer3[1]} alt="" />
               </div>
-            </div>
+            </motion.div>
             {/* Center scaler image */}
             <div className="scaler">
-              <img 
+              <motion.img 
                 ref={imageRef} 
                 src={images.center} 
                 alt="" 
                 style={{
-                  width: typeof window !== 'undefined' ? `${window.innerWidth}px` : '100vw',
-                  height: typeof window !== 'undefined' ? `${window.innerHeight}px` : '100vh',
+                  width: imageWidth,
+                  height: imageHeight
                 }}
               />
             </div>

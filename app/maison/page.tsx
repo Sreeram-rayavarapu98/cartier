@@ -2,223 +2,249 @@
 
 import Navigation from '../components/Navigation';
 import ScrollFade from '../components/ScrollFade';
-import ParallaxSection from '../components/ParallaxSection';
-import HoverScaleImage from '../components/HoverScaleImage';
-import ScrollImageGrid from '../components/ScrollImageGrid';
 import Image from 'next/image';
-
-// The Maison Page - Philosophy/About
-// Theme: Maison Luxe (p=#0b3a2e, bo=#00000014, b=#fffdf9)
+import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 export default function MaisonPage() {
   return (
-    <main className="min-h-screen" style={{ backgroundColor: '#fffdf9' }}>
+    <main className="min-h-screen bg-[#f8f6f3]">
       <Navigation />
       
-      {/* Hero Section with Parallax */}
+      {/* Hero Section */}
       <section className="relative h-[70vh] flex items-center justify-center overflow-hidden">
-        <ParallaxSection speed={0.3} className="absolute inset-0">
-          <div className="w-full h-full bg-gradient-to-br from-neutral-100 to-neutral-200 flex items-center justify-center">
-            <div className="text-center text-neutral-400">
-              <p className="text-sm uppercase tracking-wider mb-2">The Maison</p>
-              <p className="text-xs">Interior Scene</p>
-            </div>
-          </div>
-        </ParallaxSection>
+        <div className="absolute inset-0">
+          <Image
+            src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1920&h=1080&q=85&fit=crop"
+            alt="The Maison"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-black/50" />
+        </div>
         
-        <div className="relative z-10 max-w-[1920px] mx-auto px-6 lg:px-16 text-center">
-          <h1 className="text-7xl md:text-8xl lg:text-9xl font-serif font-bold mb-6 text-white">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: [0.23, 1, 0.32, 1] }}
+          className="relative z-10 text-center px-8"
+        >
+          <p className="text-sm uppercase tracking-[0.3em] text-white/60 mb-8">Est. 1984</p>
+          <h1 className="text-5xl md:text-7xl font-light text-white mb-8" style={{ fontFamily: 'Georgia, serif' }}>
             THE MAISON
           </h1>
-          <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto font-light">
-            Since 1984, Aurelius has defined the intersection of art, architecture, and living.
+          <p className="text-lg text-white/80 max-w-xl mx-auto">
+            Where timeless elegance meets modern sensibility. Discover the story behind our craft.
           </p>
-        </div>
+        </motion.div>
       </section>
 
-      {/* Our Philosophy Section */}
-      <section className="py-24 px-6 lg:px-16" style={{ backgroundColor: '#fffdf9' }}>
-        <div className="max-w-[1920px] mx-auto">
-          <ScrollFade>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <div>
-              <p className="text-xs uppercase tracking-[0.2em] mb-4" style={{ color: '#0b3a2e' }}>
-                Our Philosophy
-              </p>
-              <h2 className="text-5xl md:text-6xl font-serif font-bold mb-6 text-neutral-900">
-                SILENCE IN DESIGN
-              </h2>
-              <p className="text-lg text-neutral-700 leading-relaxed mb-6 font-light">
-                True luxury lies not in excess, but in subtraction. We believe that the most profound 
-                statements are made through restraint. Each piece in our collection is a meditation on 
-                the essential—where every line, curve, and material choice serves a purpose.
-              </p>
-              <p className="text-lg text-neutral-700 leading-relaxed font-light">
-                Our design philosophy centers on the harmony between natural materials and modern engineering. 
-                We honor the integrity of wood, stone, and metal, allowing their inherent beauty to guide 
-                our creative process.
-              </p>
+      {/* Philosophy Section */}
+      <section className="py-24 lg:py-32 bg-[#f8f6f3]">
+        <div style={{ paddingLeft: '5%', paddingRight: '5%' }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <ScrollFade>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                <div className="text-center lg:text-left">
+                  <p className="text-xs uppercase tracking-[0.3em] text-[#8B0000] mb-6">Our Philosophy</p>
+                  <h2 className="text-3xl md:text-4xl font-light text-neutral-900 mb-6 italic" style={{ fontFamily: 'Georgia, serif' }}>
+                    Silence in Design
+                  </h2>
+                  <p className="text-neutral-600 leading-relaxed mb-6">
+                    True luxury lies not in excess, but in subtraction. We believe that the most profound 
+                    statements are made through restraint. Each piece in our collection is a meditation on 
+                    the essential.
+                  </p>
+                  <p className="text-neutral-500 leading-relaxed text-sm">
+                    Our design philosophy centers on the harmony between natural materials and modern engineering.
+                    Every curve, every joint, every surface is considered with the utmost intention.
+                  </p>
+                </div>
+                <div className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-lg">
+                  <Image
+                    src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1000&q=80"
+                    alt="Design Philosophy"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
               </div>
-              <div className="aspect-[4/3] rounded-lg overflow-hidden relative border border-[#00000014]">
-                <HoverScaleImage
-                  src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&q=80"
-                  alt="Desk with Golden Sculpture"
-                  className="w-full h-full"
-                  fill
-                  scale={1.05}
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-              </div>
-            </div>
-          </ScrollFade>
+            </ScrollFade>
+          </div>
         </div>
       </section>
 
       {/* Quote Section */}
-      <section className="py-16 px-6 lg:px-16" style={{ backgroundColor: '#fffdf9' }}>
-        <ScrollFade delay={0.2}>
-          <div className="max-w-4xl mx-auto text-center">
-            <p className="text-2xl md:text-3xl font-serif italic text-neutral-900 leading-relaxed mb-6">
-              "To design is to communicate clearly by whatever means you can control or master."
-            </p>
-            <p className="text-sm uppercase tracking-wider text-neutral-600">
-              — ALESSANDRO ROSSI, FOUNDER
-            </p>
+      <section className="py-20 bg-white">
+        <div style={{ paddingLeft: '5%', paddingRight: '5%' }}>
+          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+            <ScrollFade>
+              <div className="text-center">
+                <p className="text-2xl md:text-3xl font-light italic text-neutral-900 leading-relaxed mb-6" style={{ fontFamily: 'Georgia, serif' }}>
+                  "To design is to communicate clearly by whatever means you can control or master."
+                </p>
+                <p className="text-xs uppercase tracking-[0.3em] text-neutral-500">
+                  — Alessandro Rossi, Founder
+                </p>
+              </div>
+            </ScrollFade>
           </div>
-        </ScrollFade>
-      </section>
-
-      {/* Mastery of Material Section */}
-      <section className="py-24 px-6 lg:px-16" style={{ backgroundColor: '#fffdf9' }}>
-        <div className="max-w-[1920px] mx-auto">
-          <ScrollFade delay={0.3}>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <div className="aspect-[4/3] rounded-lg overflow-hidden relative order-2 lg:order-1 border border-[#00000014]">
-                <HoverScaleImage
-                  src="https://images.unsplash.com/photo-1556911220-bff31c812dba?w=1200&q=80"
-                  alt="Hands Working with Wood"
-                  className="w-full h-full"
-                  fill
-                  scale={1.05}
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-              </div>
-              <div className="order-1 lg:order-2">
-              <p className="text-xs uppercase tracking-[0.2em] mb-4" style={{ color: '#0b3a2e' }}>
-                The Savoir-Faire
-              </p>
-              <h2 className="text-5xl md:text-6xl font-serif font-bold mb-6 text-neutral-900">
-                MASTERY OF MATERIAL
-              </h2>
-              <p className="text-lg text-neutral-700 leading-relaxed mb-6 font-light">
-                Behind every piece lies generations of expertise. Our artisans, many third-generation 
-                craftspeople, bring decades of refined skill to each creation. We hand-select every 
-                slab of Italian travertine, every plank of American walnut, ensuring that only the 
-                finest materials bear our name.
-              </p>
-              <p className="text-lg text-neutral-700 leading-relaxed font-light">
-                Our production runs are intentionally limited. We believe in the value of time, 
-                allowing each piece to be shaped, refined, and perfected without the pressure of 
-                mass production.
-              </p>
-              </div>
-            </div>
-          </ScrollFade>
         </div>
       </section>
 
-      {/* Scroll Image Grid Section */}
-      <div className="content-wrap bg-black">
-        <header className="min-h-screen flex flex-col justify-center items-start px-6 lg:px-16" style={{ maxWidth: 'calc(100% - 4rem)', paddingLeft: '48px' }}>
-          <h1 className="fluid text-white mb-6" style={{ lineHeight: 0.6 }}>
-            let's<br />scroll.
-          </h1>
-          <h2 className="fluid text-white/70" style={{ fontSize: 'clamp(0.5rem, 2vw, 1.5rem)', paddingTop: '48px' }}>
-            Originally from{' '}
-            <a href="https://codepen.io/jh3y/pen/VYZwOwd" target="_blank" rel="noopener noreferrer" className="text-white underline hover:text-white/80 transition-colors">
-              Jhey →
-            </a>
-            , converted to Motion
-          </h2>
-        </header>
-        <ScrollImageGrid />
-        <section className="min-h-screen flex items-center justify-center">
-          <h2 className="fluid text-white" style={{ lineHeight: 0.6 }}>
-            fin.
-          </h2>
-        </section>
-      </div>
+      {/* Mastery Section */}
+      <section className="py-24 lg:py-32 bg-[#f8f6f3]">
+        <div style={{ paddingLeft: '5%', paddingRight: '5%' }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <ScrollFade>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                <div className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-lg order-2 lg:order-1">
+                  <Image
+                    src="https://images.unsplash.com/photo-1556911220-bff31c812dba?w=1000&q=80"
+                    alt="Craftsmanship"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="order-1 lg:order-2 text-center lg:text-left">
+                  <p className="text-xs uppercase tracking-[0.3em] text-[#8B0000] mb-6">The Savoir-Faire</p>
+                  <h2 className="text-3xl md:text-4xl font-light text-neutral-900 mb-6" style={{ fontFamily: 'Georgia, serif' }}>
+                    Mastery of Material
+                  </h2>
+                  <p className="text-neutral-600 leading-relaxed mb-6">
+                    Behind every piece lies generations of expertise. Our artisans bring decades of refined 
+                    skill to each creation. We hand-select every slab of Italian travertine, every plank 
+                    of American walnut.
+                  </p>
+                  <p className="text-neutral-500 leading-relaxed text-sm">
+                    Our production runs are intentionally limited. We believe in the value of time,
+                    in the power of patience, and in the virtue of doing things properly.
+                  </p>
+                </div>
+              </div>
+            </ScrollFade>
+          </div>
+        </div>
+      </section>
 
-      {/* Brand Values Section */}
-      <section className="py-24 px-6 lg:px-16" style={{ backgroundColor: '#fffdf9' }}>
-        <div className="max-w-[1920px] mx-auto">
-          <ScrollFade delay={0.5}>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div>
-              <h3 className="text-2xl font-serif font-bold mb-4 text-neutral-900">RARITY</h3>
-              <p className="text-base text-neutral-700 font-light leading-relaxed">
-                Creating objects of desire that stand the test of time, transcending trends and seasons.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-2xl font-serif font-bold mb-4 text-neutral-900">INTEGRITY</h3>
-              <p className="text-base text-neutral-700 font-light leading-relaxed">
-                Honest construction where the method of assembly is as beautiful as the finished form.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-2xl font-serif font-bold mb-4 text-neutral-900">SUSTAINABILITY</h3>
-              <p className="text-base text-neutral-700 font-light leading-relaxed">
-                A promise to leave a lighter footprint, preserving the beauty of our world for the future.
-              </p>
+      {/* Collections Preview */}
+      <section className="py-24 lg:py-32 bg-white">
+        <div style={{ paddingLeft: '5%', paddingRight: '5%' }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <ScrollFade>
+              <div className="text-center mb-16">
+                <p className="text-xs uppercase tracking-[0.3em] text-[#8B0000] mb-6">Our Collections</p>
+                <h2 className="text-3xl md:text-4xl font-light italic text-neutral-900 mb-4" style={{ fontFamily: 'Georgia, serif' }}>
+                  Explore Our World
+                </h2>
+                <p className="text-neutral-600 max-w-xl mx-auto">
+                  Discover the craftsmanship and artistry behind each piece.
+                </p>
+              </div>
+            </ScrollFade>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                { title: 'Living', img: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600&h=800&q=80&fit=crop' },
+                { title: 'Dining', img: 'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=600&h=800&q=80&fit=crop' },
+                { title: 'Bedroom', img: 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=600&h=800&q=80&fit=crop' },
+              ].map((item, idx) => (
+                <ScrollFade key={item.title} delay={idx * 0.15}>
+                  <Link href="/products" className="group block">
+                    <div className="relative aspect-[3/4] rounded-xl overflow-hidden mb-4 shadow-md">
+                      <Image
+                        src={item.img}
+                        alt={item.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                      />
+                      <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500" />
+                    </div>
+                    <h3 className="text-xl font-light text-neutral-900 text-center group-hover:text-[#8B0000] transition-colors" style={{ fontFamily: 'Georgia, serif' }}>
+                      {item.title}
+                    </h3>
+                  </Link>
+                </ScrollFade>
+              ))}
             </div>
           </div>
-          </ScrollFade>
+        </div>
+      </section>
+
+      {/* Brand Values */}
+      <section className="py-24 lg:py-32 bg-[#f8f6f3]">
+        <div style={{ paddingLeft: '5%', paddingRight: '5%' }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <ScrollFade>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+                <div>
+                  <h3 className="text-xl font-light text-neutral-900 mb-4" style={{ fontFamily: 'Georgia, serif' }}>Rarity</h3>
+                  <p className="text-sm text-neutral-600">
+                    Creating objects of desire that stand the test of time, not trends.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-xl font-light text-neutral-900 mb-4" style={{ fontFamily: 'Georgia, serif' }}>Integrity</h3>
+                  <p className="text-sm text-neutral-600">
+                    Honest construction where assembly is as beautiful as the form.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-xl font-light text-neutral-900 mb-4" style={{ fontFamily: 'Georgia, serif' }}>Sustainability</h3>
+                  <p className="text-sm text-neutral-600">
+                    A promise to leave a lighter footprint for generations to come.
+                  </p>
+                </div>
+              </div>
+            </ScrollFade>
+          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-neutral-900 text-neutral-300 py-16 px-6 lg:px-16">
-        <div className="max-w-[1920px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-            <div>
-              <h3 className="text-xl font-serif font-bold text-white mb-4">AURELIUS</h3>
-              <p className="text-sm font-light leading-relaxed text-neutral-400">
-                Redefining luxury living with sustainable materials and timeless design. Experience the future of furniture shopping.
+      <footer className="bg-neutral-900 text-neutral-300 py-16">
+        <div style={{ paddingLeft: '5%', paddingRight: '5%' }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+              <div className="text-center md:text-left">
+                <div className="flex items-baseline justify-center md:justify-start mb-6">
+                  <span className="text-2xl text-white" style={{ fontFamily: "'Pinyon Script', cursive" }}>C</span>
+                  <span className="text-base tracking-[0.15em] text-white" style={{ fontFamily: 'Georgia, serif' }}>ASAVÉRA</span>
+                </div>
+                <p className="text-sm text-neutral-400 leading-relaxed">
+                  Redefining luxury living with sustainable materials and timeless design.
+                </p>
+              </div>
+              <div className="text-center md:text-left">
+                <h4 className="text-xs uppercase tracking-wider text-white mb-6">Customer Care</h4>
+                <ul className="space-y-3">
+                  <li><a href="#" className="text-sm text-neutral-400 hover:text-white transition-colors">Contact Us</a></li>
+                  <li><a href="#" className="text-sm text-neutral-400 hover:text-white transition-colors">Shipping & Returns</a></li>
+                  <li><a href="#" className="text-sm text-neutral-400 hover:text-white transition-colors">FAQ</a></li>
+                </ul>
+              </div>
+              <div className="text-center md:text-left">
+                <h4 className="text-xs uppercase tracking-wider text-white mb-6">The Maison</h4>
+                <ul className="space-y-3">
+                  <li><a href="/maison" className="text-sm text-neutral-400 hover:text-white transition-colors">Our Story</a></li>
+                  <li><a href="#" className="text-sm text-neutral-400 hover:text-white transition-colors">Designers</a></li>
+                  <li><a href="#" className="text-sm text-neutral-400 hover:text-white transition-colors">Careers</a></li>
+                </ul>
+              </div>
+              <div className="text-center md:text-left">
+                <h4 className="text-xs uppercase tracking-wider text-white mb-6">Social</h4>
+                <ul className="space-y-3">
+                  <li><a href="#" className="text-sm text-neutral-400 hover:text-white transition-colors">Instagram</a></li>
+                  <li><a href="#" className="text-sm text-neutral-400 hover:text-white transition-colors">Pinterest</a></li>
+                  <li><a href="#" className="text-sm text-neutral-400 hover:text-white transition-colors">LinkedIn</a></li>
+                </ul>
+              </div>
+            </div>
+            <div className="border-t border-neutral-800 pt-8 text-center">
+              <p className="text-xs text-neutral-500 uppercase tracking-wider">
+                &copy; {new Date().getFullYear()} CASAVÉRA. All rights reserved.
               </p>
-            </div>
-            <div>
-              <h4 className="text-xs font-medium text-white mb-4 uppercase tracking-wider">Customer Care</h4>
-              <ul className="space-y-2 text-sm font-light">
-                <li><a href="/contact" className="hover:text-white transition-colors">Contact Us</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Shipping & Returns</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Warranty</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">FAQ</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-xs font-medium text-white mb-4 uppercase tracking-wider">The Maison</h4>
-              <ul className="space-y-2 text-sm font-light">
-                <li><a href="/maison" className="hover:text-white transition-colors">Our Story</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Designers</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Sustainability</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-xs font-medium text-white mb-4 uppercase tracking-wider">Social</h4>
-              <ul className="space-y-2 text-sm font-light">
-                <li><a href="#" className="hover:text-white transition-colors">Instagram</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Pinterest</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">LinkedIn</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-neutral-800 pt-8 flex justify-between text-xs text-neutral-500">
-            <span>&copy; {new Date().getFullYear()} Aurelius Furniture. All rights reserved.</span>
-            <div className="flex gap-6">
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms of Use</a>
             </div>
           </div>
         </div>
@@ -226,4 +252,3 @@ export default function MaisonPage() {
     </main>
   );
 }
-

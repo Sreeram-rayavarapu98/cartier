@@ -1,98 +1,105 @@
+'use client';
+
 import AccountNavigation from '../components/AccountNavigation';
 import AccountSidebar from '../components/AccountSidebar';
+import AccountFooter from '../components/AccountFooter';
 import Link from 'next/link';
 
 // User Dashboard Page
 export default function DashboardPage() {
   return (
-    <main className="min-h-screen" style={{ backgroundColor: '#faf8f5' }}>
+    <main className="min-h-screen flex flex-col bg-[#f7f5f2]">
       <AccountNavigation />
       
-      <div className="max-w-[1920px] mx-auto px-6 lg:px-16 py-12">
-        <div className="flex gap-12">
-          <AccountSidebar />
-          
-          <div className="flex-1">
-            <h1 className="text-4xl md:text-5xl font-serif font-bold mb-2 text-neutral-900">
-              Welcome back, Eleanor
-            </h1>
-            <p className="text-base text-neutral-700 mb-12 font-light">
-              From your account dashboard you can view your recent orders, manage your shipping and billing 
-              addresses, and edit your password and account details.
-            </p>
+      <div className="flex-1">
+        <div style={{ paddingLeft: '5%', paddingRight: '5%' }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }} className="py-12">
+            <div className="flex flex-col lg:flex-row gap-12">
+              <AccountSidebar />
+              
+              <div className="flex-1">
+                <h1 className="text-3xl md:text-4xl font-light text-neutral-900 mb-2" style={{ fontFamily: 'Georgia, serif' }}>
+                  Welcome back, Eleanor
+                </h1>
+                <p className="text-neutral-500 mb-10 leading-relaxed">
+                  From your account dashboard you can view your recent orders, manage your shipping and billing 
+                  addresses, and edit your password and account details.
+                </p>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Recent Order */}
-              <div className="bg-white border border-neutral-200 p-8">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-sm font-medium uppercase tracking-wider text-neutral-900">
-                    Recent Order
-                  </h2>
-                  <Link href="/account/orders" className="text-sm text-neutral-700 hover:text-neutral-900 transition-colors">
-                    View All Orders
-                  </Link>
-                </div>
-                <div className="mb-6">
-                  <span className="inline-block px-3 py-1 bg-green-100 text-green-800 text-xs font-medium uppercase tracking-wider mb-3">
-                    Shipped
-                  </span>
-                  <p className="text-sm text-neutral-600 mb-1">Order #US-8492</p>
-                  <p className="text-sm text-neutral-600">Placed on October 24, 2024</p>
-                </div>
-                <div className="flex items-center gap-4 mb-6 pb-6 border-b border-neutral-200">
-                  <div className="w-20 h-20 bg-neutral-100 rounded flex items-center justify-center">
-                    <svg className="w-8 h-8 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Recent Order */}
+                  <div className="bg-white rounded-xl p-6 shadow-sm">
+                    <div className="flex items-center justify-between mb-6">
+                      <h2 className="text-xs uppercase tracking-[0.2em] text-neutral-500">
+                        Recent Order
+                      </h2>
+                      <Link href="/account/orders" className="text-xs text-neutral-500 hover:text-neutral-900 transition-colors">
+                        View All Orders
+                      </Link>
+                    </div>
+                    <div className="mb-6">
+                      <span className="inline-block px-3 py-1 bg-green-50 text-green-700 text-xs uppercase tracking-wider rounded-full mb-3">
+                        Shipped
+                      </span>
+                      <p className="text-sm text-neutral-700 mb-1">Order #US-8492</p>
+                      <p className="text-sm text-neutral-500">Placed on October 24, 2024</p>
+                    </div>
+                    <div className="flex items-center gap-4 mb-6 pb-6 border-b border-neutral-100">
+                      <div className="w-16 h-16 bg-neutral-100 rounded-lg flex items-center justify-center">
+                        <svg className="w-6 h-6 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-sm text-neutral-900 mb-1">Nordic Fabric Sofa</h3>
+                        <p className="text-xs text-neutral-500">Nordic Wool Blend</p>
+                        <p className="text-xs text-neutral-500">Qty: 1</p>
+                      </div>
+                      <p className="text-sm text-neutral-900">€3,950</p>
+                    </div>
+                    <button className="w-full py-3 border border-neutral-900 text-neutral-900 text-sm uppercase tracking-wider rounded-full hover:bg-neutral-900 hover:text-white transition-colors">
+                      Track Package
+                    </button>
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-base font-medium text-neutral-900 mb-1">The Cloud Sofa</h3>
-                    <p className="text-sm text-neutral-600 mb-1">Bouclé & Oak Base</p>
-                    <p className="text-sm text-neutral-600">Qty: 1</p>
-                  </div>
-                  <p className="text-base font-medium text-neutral-900">$4,200</p>
-                </div>
-                <button className="btn-secondary w-full border-neutral-900 text-neutral-900 hover:bg-neutral-900 hover:text-white">
-                  Track Package
-                </button>
-              </div>
 
-              {/* Account Details */}
-              <div className="bg-white border border-neutral-200 p-8">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-sm font-medium uppercase tracking-wider text-neutral-900">
-                    Account Details
-                  </h2>
-                  <Link href="/account/edit" className="text-sm text-neutral-700 hover:text-neutral-900 transition-colors">
-                    Edit
-                  </Link>
-                </div>
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-sm text-neutral-600 mb-1">Eleanor Rigby</p>
-                    <p className="text-sm text-neutral-600">eleanor.rigby@example.com</p>
+                  {/* Account Details */}
+                  <div className="bg-white rounded-xl p-6 shadow-sm">
+                    <div className="flex items-center justify-between mb-6">
+                      <h2 className="text-xs uppercase tracking-[0.2em] text-neutral-500">
+                        Account Details
+                      </h2>
+                      <Link href="/account/edit" className="text-xs text-neutral-500 hover:text-neutral-900 transition-colors">
+                        Edit
+                      </Link>
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <p className="text-sm text-neutral-900 mb-1">Eleanor Rigby</p>
+                        <p className="text-sm text-neutral-500">eleanor.rigby@example.com</p>
+                      </div>
+                      <Link href="/account/change-password" className="inline-block text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
+                        Change Password
+                      </Link>
+                    </div>
                   </div>
-                  <Link href="/account/change-password" className="text-sm text-neutral-700 hover:text-neutral-900 transition-colors">
-                    Change Password
-                  </Link>
-                </div>
-              </div>
 
-              {/* Primary Address */}
-              <div className="bg-white border border-neutral-200 p-8 lg:col-span-2">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-sm font-medium uppercase tracking-wider text-neutral-900">
-                    Primary Address
-                  </h2>
-                  <Link href="/account/addresses" className="text-sm text-neutral-700 hover:text-neutral-900 transition-colors">
-                    Manage Addresses
-                  </Link>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-neutral-900 mb-2">Shipping & Billing</p>
-                  <p className="text-sm text-neutral-600">123 Luxury Lane, Penthouse 4B</p>
-                  <p className="text-sm text-neutral-600">New York, NY 10012</p>
-                  <p className="text-sm text-neutral-600">United States</p>
+                  {/* Primary Address */}
+                  <div className="bg-white rounded-xl p-6 shadow-sm lg:col-span-2">
+                    <div className="flex items-center justify-between mb-6">
+                      <h2 className="text-xs uppercase tracking-[0.2em] text-neutral-500">
+                        Primary Address
+                      </h2>
+                      <Link href="/account/addresses" className="text-xs text-neutral-500 hover:text-neutral-900 transition-colors">
+                        Manage Addresses
+                      </Link>
+                    </div>
+                    <div>
+                      <p className="text-sm text-neutral-900 mb-2">Shipping & Billing</p>
+                      <p className="text-sm text-neutral-500">123 Luxury Lane, Penthouse 4B</p>
+                      <p className="text-sm text-neutral-500">New York, NY 10012</p>
+                      <p className="text-sm text-neutral-500">United States</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -100,62 +107,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-white border-t border-neutral-200 py-16 px-6 lg:px-16 mt-24">
-        <div className="max-w-[1920px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-            <div>
-              <h4 className="text-xs font-medium text-neutral-900 mb-4 uppercase tracking-wider">Customer Care</h4>
-              <ul className="space-y-2 text-sm text-neutral-600">
-                <li><Link href="/contact" className="hover:text-neutral-900 transition-colors">Contact Us</Link></li>
-                <li><Link href="#" className="hover:text-neutral-900 transition-colors">Shipping & Returns</Link></li>
-                <li><Link href="#" className="hover:text-neutral-900 transition-colors">Order Tracking</Link></li>
-                <li><Link href="#" className="hover:text-neutral-900 transition-colors">FAQ</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-xs font-medium text-neutral-900 mb-4 uppercase tracking-wider">The Maison</h4>
-              <ul className="space-y-2 text-sm text-neutral-600">
-                <li><Link href="#" className="hover:text-neutral-900 transition-colors">Careers</Link></li>
-                <li><Link href="#" className="hover:text-neutral-900 transition-colors">Sustainability</Link></li>
-                <li><Link href="#" className="hover:text-neutral-900 transition-colors">Press</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-xs font-medium text-neutral-900 mb-4 uppercase tracking-wider">Legal</h4>
-              <ul className="space-y-2 text-sm text-neutral-600">
-                <li><Link href="#" className="hover:text-neutral-900 transition-colors">Privacy Policy</Link></li>
-                <li><Link href="#" className="hover:text-neutral-900 transition-colors">Terms of Use</Link></li>
-                <li><Link href="#" className="hover:text-neutral-900 transition-colors">Accessibility</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-xs font-medium text-neutral-900 mb-4 uppercase tracking-wider">Follow Us</h4>
-              <div className="flex gap-4">
-                <a href="#" className="text-neutral-600 hover:text-neutral-900 transition-colors">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                  </svg>
-                </a>
-                <a href="#" className="text-neutral-600 hover:text-neutral-900 transition-colors">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                  </svg>
-                </a>
-                <a href="#" className="text-neutral-600 hover:text-neutral-900 transition-colors">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-                  </svg>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="border-t border-neutral-200 pt-8 text-center text-sm text-neutral-600">
-            <p>&copy; {new Date().getFullYear()} Aurelius. All Rights Reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <AccountFooter />
     </main>
   );
 }
-

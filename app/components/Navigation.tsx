@@ -40,13 +40,25 @@ export default function Navigation() {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled 
           ? 'bg-[#f7f5f2]/98 backdrop-blur-lg shadow-sm' 
-          : 'bg-transparent'
+          : 'bg-gradient-to-b from-black/40 via-black/20 to-transparent'
       }`}
     >
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
         <div className="flex items-center justify-between h-20">
-          <Link href="/" className="text-lg font-sans font-medium tracking-tight text-neutral-900 transition-opacity duration-300 hover:opacity-70">
-            AESTHETIQUE
+          {/* Brand Logo with Cursive C */}
+          <Link href="/" className="flex items-baseline transition-opacity duration-300 hover:opacity-70">
+            <span 
+              className={`text-3xl transition-colors duration-500 ${isScrolled ? 'text-neutral-900' : 'text-white'}`}
+              style={{ fontFamily: "'Pinyon Script', 'Dancing Script', cursive", marginRight: '-2px' }}
+            >
+              C
+            </span>
+            <span 
+              className={`text-lg tracking-[0.15em] transition-colors duration-500 ${isScrolled ? 'text-neutral-900' : 'text-white'}`}
+              style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 400 }}
+            >
+              ASAVÉRA
+            </span>
           </Link>
           
           <div className="hidden lg:flex items-center gap-12">
@@ -59,11 +71,11 @@ export default function Navigation() {
               >
                 <Link
                   href={item.href}
-                  className="label-sm text-neutral-900 transition-opacity duration-400 hover:opacity-70"
+                  className={`label-sm transition-all duration-500 hover:opacity-70 ${isScrolled ? 'text-neutral-900' : 'text-white'}`}
                 >
                   <span className="relative inline-block">
                     {item.label}
-                    <span className="absolute left-0 -bottom-1 h-px w-full bg-neutral-900 origin-left scale-x-0 transition-transform duration-400 ease-in-out group-hover:scale-x-100" />
+                    <span className={`absolute left-0 -bottom-1 h-px w-full origin-left scale-x-0 transition-transform duration-400 ease-in-out group-hover:scale-x-100 ${isScrolled ? 'bg-neutral-900' : 'bg-white'}`} />
                   </span>
                 </Link>
 
@@ -74,7 +86,7 @@ export default function Navigation() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 6 }}
                       transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-                      className="absolute left-0 mt-4 w-64 bg-white/95 backdrop-blur-lg shadow-xl border border-neutral-100 rounded-lg p-4"
+                      className="absolute left-0 mt-4 w-64 bg-white/95 backdrop-blur-lg shadow-xl border border-neutral-100 rounded-2xl p-5"
                     >
                       <div className="text-xs uppercase tracking-[0.2em] text-neutral-500 mb-3">Featured</div>
                       <div className="flex flex-col gap-2">
@@ -96,7 +108,11 @@ export default function Navigation() {
           </div>
 
           <div className="hidden lg:flex items-center gap-2">
-            <div className="flex items-center gap-2 px-2 py-1 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-neutral-100">
+            <div className={`flex items-center gap-2 px-2 py-1 rounded-full shadow-lg transition-all duration-500 ${
+              isScrolled 
+                ? 'bg-white/80 backdrop-blur-sm border border-neutral-100' 
+                : 'bg-white/90 backdrop-blur-sm'
+            }`}>
               <button 
                 onClick={() => setIsSearchOpen(true)}
                 className="nav-icon-link group"
@@ -131,17 +147,17 @@ export default function Navigation() {
           <div className="flex lg:hidden items-center gap-4">
             <button 
               onClick={() => setIsSearchOpen(true)}
-              className="text-neutral-900 hover:opacity-70 transition-opacity"
+              className={`hover:opacity-70 transition-all duration-500 ${isScrolled ? 'text-neutral-900' : 'text-white'}`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </button>
-            <button className="text-neutral-900 hover:opacity-70 transition-opacity relative">
+            <Link href="/bag" className={`hover:opacity-70 transition-all duration-500 relative ${isScrolled ? 'text-neutral-900' : 'text-white'}`}>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
-            </button>
+            </Link>
           </div>
 
           <button
@@ -152,22 +168,20 @@ export default function Navigation() {
             <div className="w-6 h-6 flex flex-col justify-center gap-1.5">
               <motion.span
                 animate={isMenuOpen ? { rotate: 45, y: 8 } : {}}
-                className="h-0.5 bg-neutral-900 w-full"
+                className={`h-0.5 w-full transition-colors duration-500 ${isScrolled ? 'bg-neutral-900' : 'bg-white'}`}
               />
               <motion.span
                 animate={isMenuOpen ? { opacity: 0 } : {}}
-                className="h-0.5 bg-neutral-900 w-full"
+                className={`h-0.5 w-full transition-colors duration-500 ${isScrolled ? 'bg-neutral-900' : 'bg-white'}`}
               />
               <motion.span
                 animate={isMenuOpen ? { rotate: -45, y: -8 } : {}}
-                className="h-0.5 bg-neutral-900 w-full"
+                className={`h-0.5 w-full transition-colors duration-500 ${isScrolled ? 'bg-neutral-900' : 'bg-white'}`}
               />
             </div>
           </button>
         </div>
       </div>
-
-      {/* Desktop hover backdrop */}
 
       <AnimatePresence>
         {isMenuOpen && (
@@ -205,4 +219,3 @@ export default function Navigation() {
     </motion.nav>
   );
 }
-

@@ -15,8 +15,8 @@ export default function AccountSidebar() {
   ];
 
   return (
-    <div className="w-64 flex-shrink-0">
-      <h2 className="text-sm font-medium uppercase tracking-wider text-neutral-900 mb-8">
+    <div className="w-56 flex-shrink-0">
+      <h2 className="text-xs uppercase tracking-[0.2em] text-neutral-500 mb-6">
         Account Overview
       </h2>
       <nav className="space-y-1">
@@ -26,19 +26,20 @@ export default function AccountSidebar() {
             <Link
               key={link.href}
               href={link.href}
-              className={`block py-3 text-sm text-neutral-700 hover:text-neutral-900 transition-colors ${
-                isActive ? 'font-bold text-neutral-900' : ''
+              className={`block py-2.5 text-sm transition-colors ${
+                isActive 
+                  ? 'text-neutral-900 font-medium' 
+                  : 'text-neutral-500 hover:text-neutral-900'
               }`}
             >
               {link.label}
             </Link>
           );
         })}
-        <button className="block py-3 text-sm text-neutral-700 hover:text-neutral-900 transition-colors w-full text-left">
+        <button className="block py-2.5 text-sm text-neutral-500 hover:text-neutral-900 transition-colors w-full text-left mt-4 pt-4 border-t border-neutral-200">
           Sign Out
         </button>
       </nav>
     </div>
   );
 }
-
